@@ -1,0 +1,19 @@
+name: PRESENCE Audit
+
+on:
+  pull_request:
+    paths:
+      - "presence.yaml"
+      - "presence-audit/examples/*.yaml"
+      - "presence-audit/cli/**"
+      - "presence-audit/schema/**"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit low-risk reference
+        run: python presence-audit/cli/presence_audit.py audit presence-audit/examples/noticer_local.yaml --fail-on HIGH
+      - name: Generate high-risk example report
+        run: python presence-audit/cli/presence_audit.py audit presence-audit/examples/cloud_wellbeing_dashboard.yaml --format markdown --output presence-audit/reports/cloud_wellbeing_dashboard.md

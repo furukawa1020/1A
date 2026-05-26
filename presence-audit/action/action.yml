@@ -1,0 +1,19 @@
+name: "PRESENCE Audit"
+description: "Audit presenteeism support designs for surveillance transmutation risk."
+inputs:
+  config:
+    description: "Path to PRESENCE YAML/JSON config."
+    required: true
+    default: "presence.yaml"
+  fail-on:
+    description: "Risk level that should fail the action: LOW, MEDIUM, HIGH, or CRITICAL."
+    required: false
+    default: "HIGH"
+runs:
+  using: "composite"
+  steps:
+    - name: Run PRESENCE audit
+      shell: bash
+      run: |
+        python "$GITHUB_ACTION_PATH/../cli/presence_audit.py" audit "${{ inputs.config }}" --fail-on "${{ inputs.fail-on }}"
+

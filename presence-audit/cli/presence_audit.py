@@ -74,64 +74,81 @@ def simple_yaml_load(text):
 
     PRESENCE例で使う小さなYAMLサブセットを読む。
     """
-    root = {}
-    stack = [(-1, root)]
-    pending_key = {}
-    lines = text.splitlines()
-    for raw_line in lines:
+    rows = []
+    for raw_line in text.splitlines():
         if not raw_line.strip() or raw_line.lstrip().startswith("#"):
             continue
         indent = len(raw_line) - len(raw_line.lstrip(" "))
-        line = raw_line.strip()
-        while stack and indent <= stack[-1][0]:
-            stack.pop()
-        parent = stack[-1][1]
+        rows.append((indent, raw_line.strip()))
 
-        if line.startswith("- "):
-            item_text = line[2:].strip()
-            if not isinstance(parent, list):
-                raise ValueError(f"List item without list parent: {raw_line}")
+    def parse_block(index, indent):
+        if index >= len(rows):
+            return {}, index
+        if rows[index][1].startswith("- "):
+            return parse_list(index, indent)
+        return parse_dict(index, indent)
+
+    def parse_dict(index, indent):
+        result = {}
+        while index < len(rows):
+            current_indent, content = rows[index]
+            if current_indent < indent:
+                break
+            if current_indent > indent:
+                raise ValueError(f"Unexpected indentation before: {content}")
+            if content.startswith("- "):
+                break
+            if ":" not in content:
+                raise ValueError(f"Expected key-value line: {content}")
+            key, value = content.split(":", 1)
+            key = key.strip()
+            value = value.strip()
+            index += 1
+            if value:
+                result[key] = parse_scalar(value)
+            elif index < len(rows) and rows[index][0] > current_indent:
+                result[key], index = parse_block(index, rows[index][0])
+            else:
+                result[key] = {}
+        return result, index
+
+    def parse_list(index, indent):
+        result = []
+        while index < len(rows):
+            current_indent, content = rows[index]
+            if current_indent < indent:
+                break
+            if current_indent > indent:
+                raise ValueError(f"Unexpected indentation before: {content}")
+            if not content.startswith("- "):
+                break
+            item_text = content[2:].strip()
+            index += 1
+            if not item_text:
+                if index < len(rows) and rows[index][0] > current_indent:
+                    item, index = parse_block(index, rows[index][0])
+                else:
+                    item = None
+                result.append(item)
+                continue
             if ":" in item_text:
                 key, value = item_text.split(":", 1)
-                item = {}
-                parent.append(item)
-                if value.strip():
-                    item[key.strip()] = parse_scalar(value)
-                else:
-                    item[key.strip()] = {}
-                    pending_key[id(item)] = key.strip()
-                stack.append((indent, item))
+                item = {key.strip(): parse_scalar(value) if value.strip() else {}}
+                if index < len(rows) and rows[index][0] > current_indent:
+                    child, index = parse_block(index, rows[index][0])
+                    if isinstance(child, dict):
+                        item.update(child)
+                    else:
+                        item[key.strip()] = child
+                result.append(item)
             else:
-                parent.append(parse_scalar(item_text))
-            continue
+                result.append(parse_scalar(item_text))
+        return result, index
 
-        if ":" not in line:
-            raise ValueError(f"Expected key-value line: {raw_line}")
-        key, value = line.split(":", 1)
-        key = key.strip()
-        value = value.strip()
-        if value:
-            parent[key] = parse_scalar(value)
-            continue
-
-        next_container = {}
-        parent[key] = next_container
-        pending_key[id(parent)] = key
-        stack.append((indent, next_container))
-
-        # If the next non-empty line at a deeper indent starts with "-",
-        # replace this mapping with a list.
-        for next_raw in lines[lines.index(raw_line) + 1:]:
-            if not next_raw.strip() or next_raw.lstrip().startswith("#"):
-                continue
-            next_indent = len(next_raw) - len(next_raw.lstrip(" "))
-            if next_indent <= indent:
-                break
-            if next_raw.strip().startswith("- "):
-                parent[key] = []
-                stack[-1] = (indent, parent[key])
-            break
-    return root
+    parsed, final_index = parse_block(0, rows[0][0] if rows else 0)
+    if final_index != len(rows):
+        raise ValueError("Could not parse complete YAML document")
+    return parsed
 
 
 def load_spec(path):
@@ -421,4 +438,3 @@ def main(argv=None):
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -4,27 +4,26 @@
 
 ### Full Title
 
-When Presenteeism Support Becomes Surveillance
+PRESENCE: Claim-Flow Threat Modeling for Surveillance Transmutation in Presenteeism Support Systems
 
 ### Subtitle
 
-A Factorial Study of Processing Location, Third-Party Visibility, and Output Claims
+A Design Audit Framework for Support, Visibility, and Assertive Claims in Health-Work-Evaluation Contexts
 
 ### Short Title
 
-Presenteeism Support as Surveillance
+PRESENCE
 
 ## 日本語
 
 ### 正式タイトル
 
-プレゼンティーズム支援はいつ監視になるのか
+PRESENCE: プレゼンティーズム支援システムにおける監視化リスクのためのClaim-Flow脅威モデリング
 
 ### 副題
 
-処理場所・第三者可視性・出力断定性の因子分解評価
+健康・作業・評価関係が交差する支援システムの設計監査フレームワーク
 
 ### ショートタイトル
 
-監視としてのプレゼンティーズム支援
-
+PRESENCE
