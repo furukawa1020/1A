@@ -11,6 +11,7 @@ import hashlib
 import hmac
 import json
 import re
+import secrets
 import sys
 from pathlib import Path
 
@@ -748,6 +749,137 @@ def verify_bundle(policy, secret):
     return bool(signature.get("value") and hmac.compare_digest(signature["value"], expected))
 
 
+SHA256_DIGESTINFO_PREFIX = bytes.fromhex("3031300d060960864801650304020105000420")
+
+
+def is_probable_prime(value, rounds=32):
+    if value < 2:
+        return False
+    small_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
+    for prime in small_primes:
+        if value == prime:
+            return True
+        if value % prime == 0:
+            return False
+    d = value - 1
+    s = 0
+    while d % 2 == 0:
+        s += 1
+        d //= 2
+    for _ in range(rounds):
+        a = secrets.randbelow(value - 3) + 2
+        x = pow(a, d, value)
+        if x in {1, value - 1}:
+            continue
+        for _ in range(s - 1):
+            x = pow(x, 2, value)
+            if x == value - 1:
+                break
+        else:
+            return False
+    return True
+
+
+def generate_prime(bits):
+    while True:
+        candidate = secrets.randbits(bits) | (1 << (bits - 1)) | 1
+        if is_probable_prime(candidate):
+            return candidate
+
+
+def b64_int(value):
+    byte_length = max(1, (value.bit_length() + 7) // 8)
+    return base64.urlsafe_b64encode(value.to_bytes(byte_length, "big")).decode("ascii").rstrip("=")
+
+
+def int_from_b64(value):
+    padding = "=" * (-len(value) % 4)
+    return int.from_bytes(base64.urlsafe_b64decode(value + padding), "big")
+
+
+def generate_rsa_keypair(bits=2048):
+    e = 65537
+    while True:
+        p = generate_prime(bits // 2)
+        q = generate_prime(bits // 2)
+        if p == q:
+            continue
+        phi = (p - 1) * (q - 1)
+        if phi % e != 0:
+            break
+    n = p * q
+    d = pow(e, -1, phi)
+    private_key = {
+        "kty": "RSA",
+        "alg": "RS256",
+        "n": b64_int(n),
+        "e": b64_int(e),
+        "d": b64_int(d),
+        "key_use": "presence_policy_signing",
+        "warning": "Research prototype key format. Protect private keys outside the repository.",
+    }
+    public_key = {
+        "kty": "RSA",
+        "alg": "RS256",
+        "n": private_key["n"],
+        "e": private_key["e"],
+        "key_use": "presence_policy_verification",
+    }
+    return private_key, public_key
+
+
+def rsa_sign_payload(payload, private_key):
+    n = int_from_b64(private_key["n"])
+    d = int_from_b64(private_key["d"])
+    key_size = (n.bit_length() + 7) // 8
+    digest_info = SHA256_DIGESTINFO_PREFIX + hashlib.sha256(canonical_json(payload)).digest()
+    padding_len = key_size - len(digest_info) - 3
+    if padding_len < 8:
+        raise ValueError("RSA key too small for SHA-256 signature")
+    encoded = b"\x00\x01" + (b"\xff" * padding_len) + b"\x00" + digest_info
+    signature = pow(int.from_bytes(encoded, "big"), d, n).to_bytes(key_size, "big")
+    return base64.b64encode(signature).decode("ascii")
+
+
+def rsa_verify_payload(payload, public_key, signature_value):
+    n = int_from_b64(public_key["n"])
+    e = int_from_b64(public_key["e"])
+    key_size = (n.bit_length() + 7) // 8
+    signature = base64.b64decode(signature_value)
+    if len(signature) != key_size:
+        return False
+    decoded = pow(int.from_bytes(signature, "big"), e, n).to_bytes(key_size, "big")
+    digest_info = SHA256_DIGESTINFO_PREFIX + hashlib.sha256(canonical_json(payload)).digest()
+    padding_len = key_size - len(digest_info) - 3
+    expected = b"\x00\x01" + (b"\xff" * padding_len) + b"\x00" + digest_info
+    return hmac.compare_digest(decoded, expected)
+
+
+def strip_signatures(policy):
+    payload = copy.deepcopy(policy)
+    payload.pop("signature", None)
+    payload.pop("asymmetric_signature", None)
+    return payload
+
+
+def sign_bundle_asymmetric(policy, private_key):
+    payload = strip_signatures(policy)
+    payload["asymmetric_signature"] = {
+        "algorithm": "RSASSA-PKCS1-v1_5-SHA256",
+        "value": rsa_sign_payload(payload, private_key),
+        "key_use": "presence_policy_signing",
+        "note": "Asymmetric research prototype. Production deployments should use audited crypto libraries and managed keys.",
+    }
+    return payload
+
+
+def verify_bundle_asymmetric(policy, public_key):
+    signature = policy.get("asymmetric_signature", {})
+    payload = strip_signatures(policy)
+    value = signature.get("value")
+    return bool(value and rsa_verify_payload(payload, public_key, value))
+
+
 def guard_command(args):
     policy = load_json(args.policy)
     if args.verify_secret and not verify_bundle(policy, args.verify_secret):
@@ -777,6 +909,32 @@ def verify_policy_command(args):
     policy = load_json(args.policy)
     ok = verify_bundle(policy, args.sign_secret)
     print("Policy signature OK" if ok else "Policy signature FAILED")
+    return 0 if ok else 2
+
+
+def generate_keypair_command(args):
+    private_key, public_key = generate_rsa_keypair(args.bits)
+    write_json(args.private_key, private_key)
+    write_json(args.public_key, public_key)
+    print(f"Wrote private key to {args.private_key}")
+    print(f"Wrote public key to {args.public_key}")
+    return 0
+
+
+def sign_policy_asym_command(args):
+    policy = load_json(args.policy)
+    private_key = load_json(args.private_key)
+    signed = sign_bundle_asymmetric(policy, private_key)
+    write_json(args.output, signed)
+    print(f"Wrote asymmetrically signed policy bundle to {args.output}")
+    return 0
+
+
+def verify_policy_asym_command(args):
+    policy = load_json(args.policy)
+    public_key = load_json(args.public_key)
+    ok = verify_bundle_asymmetric(policy, public_key)
+    print("Asymmetric policy signature OK" if ok else "Asymmetric policy signature FAILED")
     return 0 if ok else 2
 
 
@@ -991,6 +1149,23 @@ def main(argv=None):
     verify_policy.add_argument("policy")
     verify_policy.add_argument("--sign-secret", required=True)
     verify_policy.set_defaults(func=verify_policy_command)
+
+    generate_keypair = subparsers.add_parser("generate-keypair", help="Generate an RSA key pair for policy signing.")
+    generate_keypair.add_argument("--private-key", required=True)
+    generate_keypair.add_argument("--public-key", required=True)
+    generate_keypair.add_argument("--bits", type=int, default=2048)
+    generate_keypair.set_defaults(func=generate_keypair_command)
+
+    sign_policy_asym = subparsers.add_parser("sign-policy-asym", help="Sign a policy bundle with an asymmetric key.")
+    sign_policy_asym.add_argument("policy")
+    sign_policy_asym.add_argument("--private-key", required=True)
+    sign_policy_asym.add_argument("--output", required=True)
+    sign_policy_asym.set_defaults(func=sign_policy_asym_command)
+
+    verify_policy_asym = subparsers.add_parser("verify-policy-asym", help="Verify an asymmetrically signed policy bundle.")
+    verify_policy_asym.add_argument("policy")
+    verify_policy_asym.add_argument("--public-key", required=True)
+    verify_policy_asym.set_defaults(func=verify_policy_asym_command)
 
     mutation_test = subparsers.add_parser("mutation-test", help="Run simple policy/design mutation tests.")
     mutation_test.add_argument("config")

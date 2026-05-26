@@ -12,6 +12,7 @@ import importlib.util
 import json
 import random
 import re
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -149,10 +150,23 @@ def evaluate_signature_and_invalid_inputs():
         pa.analyze({"system": {"name": "broken"}})
     except ValueError:
         invalid_spec_rejected = True
+    private_key, public_key = pa.generate_rsa_keypair(1024)
+    signed_asym = pa.sign_bundle_asymmetric(policy, private_key)
+    asymmetric_signature_ok = pa.verify_bundle_asymmetric(signed_asym, public_key)
+    tampered_asym = copy.deepcopy(signed_asym)
+    tampered_asym["max_allowed_severity"] = "C6"
+    asymmetric_tamper_rejected = not pa.verify_bundle_asymmetric(tampered_asym, public_key)
     return {
-        "passed": signature_ok and tamper_rejected and invalid_request_denied and invalid_spec_rejected,
+        "passed": signature_ok
+        and tamper_rejected
+        and invalid_request_denied
+        and invalid_spec_rejected
+        and asymmetric_signature_ok
+        and asymmetric_tamper_rejected,
         "signature_ok": signature_ok,
         "tamper_rejected": tamper_rejected,
+        "asymmetric_signature_ok": asymmetric_signature_ok,
+        "asymmetric_tamper_rejected": asymmetric_tamper_rejected,
         "invalid_request_denied": invalid_request_denied,
         "invalid_spec_rejected": invalid_spec_rejected,
     }
@@ -311,6 +325,34 @@ def evaluate_public_reference_benchmark():
     }
 
 
+def evaluate_third_party_quickstart():
+    completed = subprocess.run(
+        [sys.executable, str(ROOT / "presence-tests" / "third_party_quickstart.py")],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    return {
+        "passed": completed.returncode == 0,
+        "stdout_tail": completed.stdout[-1200:],
+        "stderr_tail": completed.stderr[-1200:],
+    }
+
+
+def evaluate_demo_http_smoke():
+    completed = subprocess.run(
+        [sys.executable, str(ROOT / "presence-tests" / "demo_smoke_test.py"), "--port", "8031"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    return {
+        "passed": completed.returncode == 0,
+        "stdout_tail": completed.stdout[-1200:],
+        "stderr_tail": completed.stderr[-1200:],
+    }
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default=str(ROOT / "analysis" / "outputs" / "presence_evaluation.json"))
@@ -328,6 +370,8 @@ def main(argv=None):
         "no_network_core": evaluate_no_network_core(),
         "dependency_surface": evaluate_dependency_surface(),
         "public_reference_benchmark": evaluate_public_reference_benchmark(),
+        "third_party_quickstart": evaluate_third_party_quickstart(),
+        "demo_http_smoke": evaluate_demo_http_smoke(),
         "overhead": evaluate_overhead(args.iterations),
     }
     results["passed"] = all(item.get("passed", False) for item in results.values() if isinstance(item, dict))

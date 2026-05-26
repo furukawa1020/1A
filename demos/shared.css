@@ -48,6 +48,49 @@ h2 {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
+  margin-bottom: 16px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 14px;
+  border: 1px solid #d6dee2;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.toolbar label {
+  display: grid;
+  gap: 6px;
+  min-width: min(360px, 100%);
+  font-weight: 700;
+}
+
+select,
+button {
+  min-height: 40px;
+  border: 1px solid #b8c4c8;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #172026;
+  font: inherit;
+}
+
+select {
+  padding: 0 10px;
+}
+
+button {
+  padding: 0 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #eef4f0;
 }
 
 .panel {
@@ -80,6 +123,14 @@ h2 {
   font-weight: 700;
 }
 
+.decision-card.allow span {
+  color: #2f6846;
+}
+
+.decision-card.rewrite span {
+  color: #875c12;
+}
+
 .decision-card p {
   margin: 8px 0 0;
   color: #495057;
@@ -89,6 +140,37 @@ h2 {
   margin: 8px 0 0;
   font-size: 1.35rem;
   font-weight: 700;
+}
+
+.summary-list {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 10px 14px;
+  margin: 0;
+}
+
+.summary-list dt {
+  color: #4f6f52;
+  font-weight: 700;
+}
+
+.summary-list dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.flow-list {
+  display: grid;
+  gap: 10px;
+}
+
+.flow-item {
+  padding: 12px;
+  border: 1px solid #d6dee2;
+  border-radius: 8px;
+  background: #f8faf9;
+  overflow-wrap: anywhere;
 }
 
 pre {

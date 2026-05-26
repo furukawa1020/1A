@@ -116,6 +116,7 @@ Open:
 http://127.0.0.1:8020/demos/risk_dashboard_demo/
 http://127.0.0.1:8020/demos/employee_app_demo/
 http://127.0.0.1:8020/demos/noticer_local_guarded_demo/
+http://127.0.0.1:8020/demos/bench_playground/
 ```
 
 The demos are abstract reproductions of feature patterns, not copies or assessments of real services.
