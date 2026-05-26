@@ -1,0 +1,45 @@
+system:
+  name: cloud_dashboard_risk_demo
+  domain: presenteeism_support
+  intended_use:
+    - self_observation
+    - team_wellbeing_support
+  mandatory_use: true
+  clinical_governance: false
+
+data:
+  signals:
+    - heart_rate
+    - keyboard_activity
+    - self_report
+  processing: cloud
+  retention: long_term
+  identifiability: pseudonymous
+
+visibility:
+  user: true
+  manager: true
+  teacher: false
+  employer: true
+  researcher: false
+
+claims:
+  - id: c1
+    text: "Reduced work efficiency"
+    type: productivity
+    severity: C5
+    source:
+      - heart_rate
+      - keyboard_activity
+
+actions:
+  - manager_report
+  - weekly_team_summary
+  - team_benchmark
+
+controls:
+  local_processing: false
+  raw_data_deleted: false
+  user_only: false
+  non_assertive_output: false
+  opt_out: none
