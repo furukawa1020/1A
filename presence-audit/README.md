@@ -40,6 +40,18 @@ Mutation test:
 python presence-audit\cli\presence_audit.py mutation-test presence-audit\examples\noticer_local.yaml
 ```
 
+Static claim scan:
+
+```powershell
+python presence-audit\cli\presence_audit.py scan app\src presence-sdk-js\src presence-sdk-ts\src --fail-on HIGH
+```
+
+Minimized guard log:
+
+```powershell
+python presence-audit\cli\presence_audit.py guard presence-policy\presence.guard.policy.json presence-tests\fixtures\request_productivity_manager.json --log-output analysis\outputs\guard_event.min.json
+```
+
 Generate Markdown:
 
 ```powershell
@@ -50,6 +62,18 @@ Fail CI on high risk:
 
 ```powershell
 python presence-audit\cli\presence_audit.py audit presence.yaml --fail-on HIGH
+python presence-audit\cli\presence_audit.py scan src --fail-on HIGH
+```
+
+GitHub Action:
+
+```yaml
+- uses: ./presence-audit/action
+  with:
+    config: presence.yaml
+    fail-on: HIGH
+    scan-paths: "src app"
+    scan-fail-on: HIGH
 ```
 
 ### Risk Levels

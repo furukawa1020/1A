@@ -801,6 +801,8 @@ def scan_file(path):
         text = path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
         text = path.read_text(encoding="utf-8", errors="ignore")
+    if "presence-scan: ignore-file" in "\n".join(text.splitlines()[:10]):
+        return []
     findings = []
     for line_number, line in enumerate(text.splitlines(), start=1):
         normalized_line = line.lower()

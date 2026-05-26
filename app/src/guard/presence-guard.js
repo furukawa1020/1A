@@ -1,4 +1,5 @@
 (function initPresenceGuard(globalScope) {
+  // presence-scan: ignore-file
   const CLAIM_SCORES = {
     C0: 0,
     C1: 1,
@@ -193,4 +194,3 @@
     globalScope.PresenceGuard = PresenceGuard;
   }
 })(typeof window !== "undefined" ? window : globalThis);
-

@@ -18,12 +18,16 @@ The runner checks:
 - Signed policy verification and tamper rejection.
 - Invalid spec and unknown severity rejection.
 - Static bypass detection for direct claim rendering.
+- Static claim scanning for direct dangerous claim literals.
+- Minimal logging checks that exclude claim text, source signals, and user identifiers.
 - Fuzz negative tests that ensure high-risk requests are never allowed.
 - No-network core scanning for the Rust and C core files.
 - Runtime dependency surface checks.
 - Lightweight decision latency and artifact-size measurements.
 
 The browser demo now treats Guard output as authoritative. It initially shows a neutral pending message, then renders only the guard-approved text, the guard rewrite, or a denial message. It does not render `condition.output_text` directly as the user-visible state claim.
+
+Third-party adoption is exercised with templates under `templates/`, including a low-risk self-observation template, an unsafe-to-safe migration template, a cloud dashboard risk demo, an embedded gateway template, and a Noticer Local reference template.
 
 ## 日本語
 
@@ -43,9 +47,13 @@ python presence-tests\run_presence_evaluation.py --output analysis\outputs\prese
 - 署名付きpolicyの検証と改ざん拒否を確認する。
 - invalid specとunknown severityの拒否を確認する。
 - 直接claim描画に対するstatic bypass detectionを行う。
+- dangerous claim literalを検出するstatic claim scanを行う。
+- claim text、source signal、user identifierを保存しないminimal loggingを確認する。
 - 高リスクrequestがallowされないことをfuzz negative testで確認する。
 - Rust coreとC coreにnetwork API呼び出しがないことをscanする。
 - runtime dependency surfaceを確認する。
 - 軽量なdecision latencyとartifact sizeを測定する。
 
 ブラウザdemoでは、Guard出力を権威ある判定として扱う。最初は中立的な判定中メッセージのみを表示し、その後はGuardが許可した文、Guardのrewrite、またはdenyメッセージだけを表示する。`condition.output_text` を利用者に見える状態claimとして直接描画しない。
+
+第三者導入性は、`templates/` 以下の低リスク自己観察template、危険設計から安全設計へのmigration template、cloud dashboard risk demo、embedded gateway template、Noticer Local reference templateで確認する。

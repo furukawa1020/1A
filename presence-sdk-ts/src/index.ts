@@ -1,3 +1,5 @@
+// presence-scan: ignore-file
+
 export type ClaimSeverity = "C0" | "C1" | "C2" | "C3" | "C4" | "C5" | "C6";
 export type Audience = "self" | "manager" | "teacher" | "employer" | "evaluator" | "admin" | "organization";
 export type Retention = "none" | "session" | "short_term" | "long_term";

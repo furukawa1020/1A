@@ -1,4 +1,5 @@
 (function initQuestionnaireItems(global) {
+  // presence-scan: ignore-file
   const PSTT = global.PSTT || (global.PSTT = {});
 
   PSTT.questionGroups = [

@@ -18,6 +18,7 @@ The central security and privacy question is not "How accurately can we infer a 
 - `presence-ffi-c/`: embedded-style C ABI sketch.
 - `presence-audit/`: schema, CLI, examples, sample reports, policy bundle commands, mutation tests, and CI/action integration.
 - `presence-security/`: threat model, security requirements, evaluation plan, and prototype SBOM.
+- `templates/`: third-party integration and migration templates.
 - `docs/`: positioning, threat model, PRESENCE toolchain, factorial design, measures, ESS audit, ethics, and analysis plan.
 - `app/`: browser-based PSTT experiment interface and 2x2x2 condition file.
 - `app/audit.html`: researcher-only audit view that computes ESS and policy findings without participant ratings.
@@ -70,6 +71,56 @@ python presence-tests\benchmark_guard.py --output analysis\outputs\presence_over
 ```
 
 The evaluation covers P1-P12 misuse-case fixtures, policy mutation tests, runtime allow/rewrite/deny decisions, signed policy tamper rejection, invalid input rejection, bypass checks, fuzz negative tests, no-network core scanning, dependency-surface checks, and overhead measurements.
+
+### Five-Minute Third-Party Quickstart
+
+```powershell
+python presence-audit\cli\presence_audit.py audit templates\self_observation_local_only\presence.yaml --fail-on HIGH
+python presence-audit\cli\presence_audit.py scan templates\self_observation_local_only --fail-on HIGH
+python presence-audit\cli\presence_audit.py audit templates\local_assertive_to_non_assertive_migration\before.presence.yaml
+python presence-audit\cli\presence_audit.py audit templates\local_assertive_to_non_assertive_migration\after.presence.yaml --fail-on HIGH
+```
+
+The migration template shows the practical mitigation path from a C4 psychological label to a C2 self-only cue.
+
+### Build Gate
+
+```yaml
+- uses: ./presence-audit/action
+  with:
+    config: presence.yaml
+    fail-on: HIGH
+    scan-paths: "src app"
+    scan-fail-on: HIGH
+```
+
+This combines design audit, static dangerous-claim scanning, and CI failure on high-risk claim-flow.
+
+## 日本語クイックスタート
+
+第三者が5分で試す場合は次を実行する。
+
+```powershell
+python presence-audit\cli\presence_audit.py audit templates\self_observation_local_only\presence.yaml --fail-on HIGH
+python presence-audit\cli\presence_audit.py scan templates\self_observation_local_only --fail-on HIGH
+python presence-audit\cli\presence_audit.py audit templates\local_assertive_to_non_assertive_migration\before.presence.yaml
+python presence-audit\cli\presence_audit.py audit templates\local_assertive_to_non_assertive_migration\after.presence.yaml --fail-on HIGH
+```
+
+migration templateは、C4 psychological labelからC2 self-only cueへ移す実装可能な緩和経路を示す。
+
+CI gateは次のように使う。
+
+```yaml
+- uses: ./presence-audit/action
+  with:
+    config: presence.yaml
+    fail-on: HIGH
+    scan-paths: "src app"
+    scan-fail-on: HIGH
+```
+
+これにより、設計監査、危険claim文字列のstatic scan、高リスクclaim-flowでのCI失敗を組み合わせる。
 
 Paper 1Aの人なし評価を実行するには次を使う。
 
