@@ -1,69 +1,107 @@
-# Presenteeism Support Surveillance Transmutation Testbed
+# PRESENCE Guard
 
 ## English
 
-This repository contains PRESENCE Guard, claim-capability enforcement middleware for preventing surveillance transmutation in presenteeism support systems.
+PRESENCE Guard is claim-capability enforcement middleware for presenteeism support systems.
 
-The project does not aim to detect presenteeism, diagnose stress, or evaluate productivity. Instead, it treats system-generated claims as security/privacy control objects and enforces how processing, retention, authority visibility, secondary use, evidence strength, normative actionability, claim severity, and exit possibility shape what a system may say.
+The project does not detect presenteeism, diagnose stress or mental health, evaluate productivity, or judge whether any real service is unsafe. Instead, it treats system-generated claims as security/privacy control objects and controls when a support system may render, export, retain, or expose those claims.
 
-The central security and privacy question is not "How accurately can we infer a user's state?" but "When do claims generated for self-observation cross authority and interpretation boundaries and become monitoring, labeling, or assessment?"
+The central question is:
 
-### Repository Layout
+> When do claims generated for self-observation cross authority and interpretation boundaries and become monitoring, labeling, or assessment?
 
-- `presence-core/`: runtime decision model for claim-capability enforcement.
-- `presence-sdk-ts/`: TypeScript SDK shape for Web/Node integration.
-- `presence-policy/`: default deny-by-default PRESENCE Guard policy.
-- `presence-sdk-js/`: Web/JavaScript runtime guard SDK.
+## 日本語
+
+PRESENCE Guardは、プレゼンティーズム支援システムのためのclaim-capability enforcement middlewareである。
+
+本プロジェクトは、プレゼンティーズムの検出、ストレスやメンタルヘルスの診断、生産性評価、実在サービスの安全性判定を目的としない。代わりに、システムが生成する状態claimをセキュリティ/プライバシー上の制御対象として扱い、支援システムがそれらのclaimをいつ表示・出力・保存・権限者へ可視化してよいかを制御する。
+
+中心的な問いは次である。
+
+> 自己観察のために生成されたclaimは、いつauthority boundaryとinterpretation boundaryを越えて、監視・ラベリング・査定へ転化するのか。
+
+## Repository Layout / 構成
+
+- `presence-core/`: Rust no-network decision core, C ABI, and WASM package.
+- `presence-sdk-js/`: Web/JavaScript runtime Guard SDK.
+- `presence-sdk-ts/`: TypeScript SDK with generated `dist/` output.
 - `presence-sdk-dart/`: Dart/Flutter API sketch.
-- `presence-ffi-c/`: embedded-style C ABI sketch.
-- `presence-audit/`: schema, CLI, examples, sample reports, policy bundle commands, mutation tests, and CI/action integration.
-- `presence-security/`: threat model, security requirements, evaluation plan, and prototype SBOM.
+- `presence-ffi-c/`: embedded-style C ABI and demo.
+- `presence-policy/`: default deny-by-default policy and policy bundles.
+- `presence-audit/`: YAML audit, runtime guard command, static claim scanner, policy signing, reports, and GitHub Action.
 - `presence-bench/`: public-information reference profiles and benchmark reports.
-- `demos/`: abstract reproduction UIs for manager dashboard, employee app, and Noticer Local patterns.
-- `templates/`: third-party integration and migration templates.
-- `docs/`: positioning, threat model, PRESENCE toolchain, factorial design, measures, ESS audit, ethics, and analysis plan.
-- `app/`: browser-based PSTT experiment interface and 2x2x2 condition file.
-- `app/audit.html`: researcher-only audit view that computes ESS and policy findings without participant ratings.
-- `analysis/`: preregistration draft and analysis scripts.
-- `analysis/scripts/08_compute_ess.py`: researcher-side ESS audit from the condition JSON.
-- `analysis/scripts/09_policy_audit.py`: policy finding audit from the condition JSON.
-- `paper/`: paper title, abstract, introduction, method, and discussion templates.
+- `presence-security/`: threat model, logging design, policy signing design, SBOM, and security requirements.
+- `presence-tests/`: evaluation, quickstart, benchmark, demo, fuzz, and security checks.
+- `templates/`: third-party quickstart and migration templates.
+- `demos/`: touchable demos and benchmark playground.
+- `paper/`: paper sections and result templates.
+- `docs/`: design notes, architecture, evaluation, adoption, and public reference profile documentation.
+- `app/`: Paper 1B scenario-testbed prototype retained for later human validation.
 
-### Run The Testbed
+## Five-Minute Quickstart / 5分クイックスタート
 
-The app loads `app/conditions/conditions_2x2x2.json`, so serve it over local HTTP:
+Run a low-risk template audit:
 
 ```powershell
-python -m http.server 8000 --bind 127.0.0.1 --directory app
+python presence-audit\cli\presence_audit.py audit templates\self_observation_local_only\presence.yaml --fail-on HIGH
 ```
 
-Then open:
+Scan the template for direct dangerous claim literals:
+
+```powershell
+python presence-audit\cli\presence_audit.py scan templates\self_observation_local_only --fail-on HIGH
+```
+
+Compare unsafe and mitigated migration profiles:
+
+```powershell
+python presence-audit\cli\presence_audit.py audit templates\local_assertive_to_non_assertive_migration\before.presence.yaml
+python presence-audit\cli\presence_audit.py audit templates\local_assertive_to_non_assertive_migration\after.presence.yaml --fail-on HIGH
+```
+
+日本語: 低リスクtemplateの監査、危険claim文字列のscan、危険設計から安全設計へのmigration例を上の3手順で確認できる。
+
+## Touch The Demos / デモを触る
+
+Serve the repository root:
+
+```powershell
+python -m http.server 8020 --bind 127.0.0.1
+```
+
+Open:
 
 ```text
-http://127.0.0.1:8000/
+http://127.0.0.1:8020/demos/bench_playground/
+http://127.0.0.1:8020/demos/risk_dashboard_demo/
+http://127.0.0.1:8020/demos/employee_app_demo/
+http://127.0.0.1:8020/demos/noticer_local_guarded_demo/
 ```
 
-Responses are stored in the browser's local storage and can be exported as CSV or JSON. No server upload is performed by the app.
+The demos are abstract reproductions of public feature patterns, not copies or assessments of real services.
 
-For researcher-side condition auditing without participants, open:
+日本語: demoは実在サービスのcopyや評価ではなく、公開機能パターンを抽象化した再現UIである。`bench_playground` ではprofile選択、Guard判定、mitigation適用を触れる。
 
-```text
-http://127.0.0.1:8000/audit.html
-```
+## Benchmark / ベンチマーク
 
-### Run presence-audit
+Run the public-information reference benchmark:
 
 ```powershell
-python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml
+python presence-bench\run_benchmark.py --output presence-bench\reports\benchmark_report.md --json-output presence-bench\reports\benchmark_report.json
 ```
 
-### Run PRESENCE Guard
+Profiles:
 
-```powershell
-python presence-audit\cli\presence_audit.py guard presence-policy\presence.guard.policy.json presence-tests\fixtures\request_high_stress_self.json
-node presence-sdk-js\test\guard_smoke_test.js
-cargo test --manifest-path presence-core\Cargo.toml
-```
+- `presenteeism_survey_dashboard`
+- `employee_app_manager_dashboard`
+- `health_data_labor_risk_dashboard`
+- `stress_check_high_risk_extraction`
+- `productivity_loss_visualization`
+- `noticer_local_low_risk`
+
+日本語: `presence-bench` は公開機能説明から抽象化したreference profileを用いる。実在サービスを攻撃・診断・順位付けするものではない。
+
+## Full Evaluation / 全評価
 
 Run the Paper 1A non-human evaluation:
 
@@ -72,26 +110,64 @@ python presence-tests\run_presence_evaluation.py --output analysis\outputs\prese
 python presence-tests\benchmark_guard.py --output analysis\outputs\presence_overhead.json
 ```
 
-The evaluation covers P1-P12 misuse-case fixtures, policy mutation tests, runtime allow/rewrite/deny decisions, signed policy tamper rejection, invalid input rejection, bypass checks, fuzz negative tests, no-network core scanning, dependency-surface checks, and overhead measurements.
-
-Run the public-information benchmark:
+Run third-party quickstart verification:
 
 ```powershell
-python presence-bench\run_benchmark.py --output presence-bench\reports\benchmark_report.md
+python presence-tests\third_party_quickstart.py
 ```
 
-### Five-Minute Third-Party Quickstart
+Run demo HTTP and screenshot smoke tests:
 
 ```powershell
-python presence-audit\cli\presence_audit.py audit templates\self_observation_local_only\presence.yaml --fail-on HIGH
-python presence-audit\cli\presence_audit.py scan templates\self_observation_local_only --fail-on HIGH
-python presence-audit\cli\presence_audit.py audit templates\local_assertive_to_non_assertive_migration\before.presence.yaml
-python presence-audit\cli\presence_audit.py audit templates\local_assertive_to_non_assertive_migration\after.presence.yaml --fail-on HIGH
+python presence-tests\demo_smoke_test.py --screenshots
 ```
 
-The migration template shows the practical mitigation path from a C4 psychological label to a C2 self-only cue.
+日本語: Paper 1Aは人なし評価として、misuse-case detection、policy mutation、runtime decision、static scan、public benchmark、quickstart、demo smoke test、minimal logging、WASM/TS/Rust/C確認を行う。
 
-### Build Gate
+## SDK/Core Verification / SDK・core確認
+
+TypeScript:
+
+```powershell
+npm.cmd --prefix presence-sdk-ts install --no-audit --no-fund
+npm.cmd --prefix presence-sdk-ts run typecheck
+npm.cmd --prefix presence-sdk-ts run build
+```
+
+Rust and WASM:
+
+```powershell
+cargo test --manifest-path presence-core\Cargo.toml
+cargo build --manifest-path presence-core\Cargo.toml --release --target wasm32-unknown-unknown
+Copy-Item presence-core\target\wasm32-unknown-unknown\release\presence_core.wasm presence-core\pkg\presence_core.wasm -Force
+```
+
+WASM loader check:
+
+```powershell
+node --input-type=module -e "import fs from 'node:fs/promises'; import { decodeDecision } from './presence-core/pkg/presence_core_wasm_loader.js'; const bytes=await fs.readFile('presence-core/pkg/presence_core.wasm'); const wasm=await WebAssembly.instantiate(bytes,{}); console.log(decodeDecision(wasm.instance.exports.presence_request_claim_code(2,0,1,0,0,1)));"
+```
+
+C embedded demo:
+
+```powershell
+gcc presence-ffi-c\src\presence_guard.c presence-ffi-c\examples\embedded_gateway.c -o presence-ffi-c\examples\embedded_gateway_build.exe
+presence-ffi-c\examples\embedded_gateway_build.exe
+```
+
+## Policy Signing / Policy署名
+
+Generate keys, sign, and verify:
+
+```powershell
+python presence-audit\cli\presence_audit.py generate-keypair --private-key analysis\outputs\policy.private.json --public-key analysis\outputs\policy.public.json
+python presence-audit\cli\presence_audit.py sign-policy-asym presence-policy\presence.guard.policy.json --private-key analysis\outputs\policy.private.json --output analysis\outputs\presence.guard.asym.bundle.json
+python presence-audit\cli\presence_audit.py verify-policy-asym analysis\outputs\presence.guard.asym.bundle.json --public-key analysis\outputs\policy.public.json
+```
+
+日本語: 非対称署名は研究prototypeである。本番運用では監査済み暗号library、managed keys、key rotation、provenance、secure update frameworkを使うべきである。
+
+## CI Gate / CIゲート
 
 ```yaml
 - uses: ./presence-audit/action
@@ -104,178 +180,17 @@ The migration template shows the practical mitigation path from a C4 psychologic
 
 This combines design audit, static dangerous-claim scanning, and CI failure on high-risk claim-flow.
 
-### Benchmark Demos
+日本語: 設計監査、危険claim文字列のstatic scan、高リスクclaim-flowでのCI失敗を組み合わせる。
 
-```powershell
-python -m http.server 8020 --bind 127.0.0.1
-```
-
-Open:
-
-```text
-http://127.0.0.1:8020/demos/risk_dashboard_demo/
-http://127.0.0.1:8020/demos/employee_app_demo/
-http://127.0.0.1:8020/demos/noticer_local_guarded_demo/
-http://127.0.0.1:8020/demos/bench_playground/
-```
-
-The demos are abstract reproductions of feature patterns, not copies or assessments of real services.
-
-## 日本語クイックスタート
-
-第三者が5分で試す場合は次を実行する。
-
-```powershell
-python presence-audit\cli\presence_audit.py audit templates\self_observation_local_only\presence.yaml --fail-on HIGH
-python presence-audit\cli\presence_audit.py scan templates\self_observation_local_only --fail-on HIGH
-python presence-audit\cli\presence_audit.py audit templates\local_assertive_to_non_assertive_migration\before.presence.yaml
-python presence-audit\cli\presence_audit.py audit templates\local_assertive_to_non_assertive_migration\after.presence.yaml --fail-on HIGH
-```
-
-migration templateは、C4 psychological labelからC2 self-only cueへ移す実装可能な緩和経路を示す。
-
-CI gateは次のように使う。
-
-```yaml
-- uses: ./presence-audit/action
-  with:
-    config: presence.yaml
-    fail-on: HIGH
-    scan-paths: "src app"
-    scan-fail-on: HIGH
-```
-
-これにより、設計監査、危険claim文字列のstatic scan、高リスクclaim-flowでのCI失敗を組み合わせる。
-
-公開情報ベースのbenchmarkは次で実行する。
-
-```powershell
-python presence-bench\run_benchmark.py --output presence-bench\reports\benchmark_report.md
-```
-
-demo UIは、実在サービスのcopyや評価ではなく、公開機能パターンを抽象化した再現UIである。
-
-Paper 1Aの人なし評価を実行するには次を使う。
-
-```powershell
-python presence-tests\run_presence_evaluation.py --output analysis\outputs\presence_evaluation.json
-python presence-tests\benchmark_guard.py --output analysis\outputs\presence_overhead.json
-```
-
-この評価は、P1からP12までのmisuse-case fixture、policy mutation test、runtimeのallow/rewrite/deny判定、署名付きpolicyの改ざん拒否、invalid input rejection、bypass check、fuzz negative test、no-network core scan、dependency-surface check、overhead measurementを対象にする。
-
-Generate a Markdown report:
-
-```powershell
-python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml --format markdown --output presence-audit\reports\sample_report.md
-```
-
-### Study Design
-
-The Paper 1A artifact is a static audit framework and toolchain. The 2 x 2 x 2 scenario experiment is retained as the Paper 1B validation path:
-
-| Factor | Level 1 | Level 2 |
-| --- | --- | --- |
-| Processing Location | Cloud | Local |
-| Third-party Visibility | Manager-visible | Self-only |
-| Output Claim | Assertive Label | Non-assertive Cue |
-
-The proposed lower-risk configuration is `C8 = Local + Self-only + Non-assertive Cue`.
-
-### Non-Goals
+## Non-Goals / 非目的
 
 This project must not claim that it can:
 
-- detect presenteeism,
+- detect actual presenteeism,
 - diagnose stress or mental health,
 - evaluate productivity,
 - improve health outcomes,
-- prove that cloud processing or manager visibility is always harmful.
+- prove that cloud processing or manager visibility is always harmful,
+- assess or rank real services.
 
-## 日本語
-
-本リポジトリは、プレゼンティーズム支援システムにおける監視化転化を防ぐための claim-capability enforcement middleware、PRESENCE Guard を含む。
-
-本プロジェクトは、プレゼンティーズムの検出、ストレス診断、生産性評価を目的としない。その代わりに、システムが生成するclaimをセキュリティ/プライバシー上の制御対象として扱い、処理、保持、authority可視性、二次利用、証拠強度、行動命令性、claim severity、離脱可能性に基づいて、システムが何を言ってよいかを強制する。
-
-中心となるセキュリティ/プライバシー上の問いは、「ユーザー状態をどれだけ正確に推定できるか」ではなく、「自己観察のために生成されたclaimが、いつauthority boundaryやinterpretation boundaryを越え、監視・ラベリング・査定になるのか」である。
-
-### リポジトリ構成
-
-- `presence-core/`: claim-capability enforcementの実行時判定モデル。
-- `presence-policy/`: deny-by-defaultのPRESENCE Guard標準policy。
-- `presence-sdk-js/`: Web/JavaScript runtime guard SDK。
-- `presence-sdk-dart/`: Dart/Flutter API sketch。
-- `presence-ffi-c/`: 組み込み向けC ABI sketch。
-- `presence-audit/`: schema、CLI、examples、sample reports、policy bundle command、mutation test、CI/action統合。
-- `presence-security/`: 脅威モデル、セキュリティ要件、評価計画、prototype SBOM。
-- `docs/`: 位置づけ、脅威モデル、PRESENCEツールチェーン、因子設計、尺度、ESS監査、倫理、分析計画。
-- `app/`: ブラウザで動作するPSTT実験UIと2x2x2条件定義ファイル。
-- `app/audit.html`: 参加者評価なしでESSとポリシー所見を計算する研究者用監査ビュー。
-- `analysis/`: 事前登録草案と分析スクリプト。
-- `analysis/scripts/08_compute_ess.py`: 条件JSONから研究者側ESS監査を行うスクリプト。
-- `analysis/scripts/09_policy_audit.py`: 条件JSONからポリシー所見を出す監査スクリプト。
-- `paper/`: 論文タイトル、要旨、導入、方法、結果、議論の雛形。
-
-### 実験基盤の起動
-
-アプリは `app/conditions/conditions_2x2x2.json` を読み込むため、ローカルHTTPで配信する。
-
-```powershell
-python -m http.server 8000 --bind 127.0.0.1 --directory app
-```
-
-その後、次のURLを開く。
-
-```text
-http://127.0.0.1:8000/
-```
-
-回答はブラウザのローカルストレージに保存され、CSVまたはJSONとしてエクスポートできる。アプリは回答をサーバーへアップロードしない。
-
-参加者を使わずに条件監査だけを行う場合は、次を開く。
-
-```text
-http://127.0.0.1:8000/audit.html
-```
-
-### presence-audit の実行
-
-```powershell
-python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml
-```
-
-### PRESENCE Guard の実行
-
-```powershell
-python presence-audit\cli\presence_audit.py guard presence-policy\presence.guard.policy.json presence-tests\fixtures\request_high_stress_self.json
-node presence-sdk-js\test\guard_smoke_test.js
-```
-
-Markdownレポートを生成する。
-
-```powershell
-python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml --format markdown --output presence-audit\reports\sample_report.md
-```
-
-### 研究デザイン
-
-Paper 1Aの中核成果物は、静的監査フレームワークとツールチェーンである。2 x 2 x 2 のシナリオ実験は、Paper 1Bの妥当性検証として残す。
-
-| 因子 | 水準1 | 水準2 |
-| --- | --- | --- |
-| 処理場所 | Cloud | Local |
-| 第三者可視性 | Manager-visible | Self-only |
-| 出力断定性 | Assertive Label | Non-assertive Cue |
-
-監視化リスクを抑える設計候補は `C8 = Local + Self-only + Non-assertive Cue` である。
-
-### 非目的
-
-本プロジェクトでは、以下を主張してはいけない。
-
-- プレゼンティーズムを検出できる。
-- ストレスやメンタルヘルスを診断できる。
-- 生産性を評価できる。
-- 健康上のアウトカムを改善できる。
-- クラウド処理や管理者可視性が常に有害である。
+日本語: 本プロジェクトは、実際のプレゼンティーズム検出、ストレス/メンタルヘルス診断、生産性評価、健康アウトカム改善、クラウド処理や管理者可視性の一律有害性、実在サービスの評価や順位付けを主張してはならない。
