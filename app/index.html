@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PSTT Study 1A</title>
+    <link rel="stylesheet" href="src/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="kicker">PSTT Study 1A</p>
+        <h1>Presenteeism Support Surveillance Transmutation Testbed</h1>
+      </div>
+      <div class="session-panel" aria-live="polite">
+        <span id="studyVersion">loading</span>
+        <span id="progressLabel">準備中</span>
+      </div>
+    </header>
+
+    <main id="app" class="shell" tabindex="-1"></main>
+
+    <template id="startTemplate">
+      <section class="instrument">
+        <div class="section-band">
+          <h2>参加前確認</h2>
+          <p>この研究は、医学的診断、メンタルヘルス評価、勤務評価、学業評価を目的としません。</p>
+          <p>実験では、休んでいないが万全ではない状態で使われる自己観察支援システムを想像します。実際の不調を誘導したり、回答を管理者・教員・雇用者へ共有したりすることはありません。</p>
+          <p>自由記述には、個人を特定できる情報や、具体的な病名・診断名を書かないでください。</p>
+        </div>
+
+        <div class="form-grid">
+          <label class="field">
+            <span>参加者ID</span>
+            <input id="participantIdInput" type="text" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>条件順序</span>
+            <input id="orderPreviewInput" type="text" readonly>
+          </label>
+        </div>
+
+        <label class="check-row">
+          <input id="consentInput" type="checkbox">
+          <span>上記を確認し、このシナリオベース実験を開始します。</span>
+        </label>
+
+        <div class="actions">
+          <button id="startButton" class="primary" type="button">開始</button>
+          <button id="resumeButton" type="button">保存済み回答を確認</button>
+        </div>
+      </section>
+    </template>
+
+    <template id="conditionTemplate">
+      <section class="instrument">
+        <div class="section-band scenario">
+          <h2>共通シナリオ</h2>
+          <div id="scenarioText"></div>
+        </div>
+
+        <div class="condition-grid" aria-label="条件説明">
+          <article class="condition-block">
+            <h3>処理場所</h3>
+            <p id="processingText"></p>
+          </article>
+          <article class="condition-block">
+            <h3>第三者可視性</h3>
+            <p id="visibilityText"></p>
+          </article>
+          <article class="condition-block output-block">
+            <h3>表示される出力</h3>
+            <div id="outputText"></div>
+          </article>
+        </div>
+
+        <form id="responseForm" class="questionnaire">
+          <div id="questionGroups"></div>
+          <label class="free-text">
+            <span>この条件を「支援」と感じたか、「監視」と感じたか。その理由を書いてください。</span>
+            <textarea id="freeText" name="free_text" rows="5" maxlength="1200" placeholder="個人を特定できる情報や具体的な病名・診断名は書かないでください。"></textarea>
+          </label>
+          <p id="formError" class="error" role="alert"></p>
+          <div class="actions">
+            <button id="saveNextButton" class="primary" type="submit">回答して次へ</button>
+            <button id="saveDraftButton" type="button">一時保存</button>
+          </div>
+        </form>
+      </section>
+    </template>
+
+    <template id="completeTemplate">
+      <section class="instrument">
+        <div class="section-band">
+          <h2>完了</h2>
+          <p>8条件すべての回答がこのブラウザに保存されています。CSVまたはJSONとしてエクスポートできます。</p>
+        </div>
+        <div id="completionSummary" class="summary-grid"></div>
+        <div class="actions">
+          <button id="downloadCsvButton" class="primary" type="button">CSVを保存</button>
+          <button id="downloadJsonButton" type="button">JSONを保存</button>
+          <button id="reviewButton" type="button">回答を確認</button>
+          <button id="newSessionButton" type="button">新しい参加者IDで開始</button>
+        </div>
+      </section>
+    </template>
+
+    <script src="src/scenario/scenario.js"></script>
+    <script src="src/questionnaire/items.js"></script>
+    <script src="src/manipulation_check/items.js"></script>
+    <script src="src/condition_renderer/renderer.js"></script>
+    <script src="src/logger/storage.js"></script>
+    <script src="src/export/exporter.js"></script>
+    <script src="src/main.js"></script>
+  </body>
+</html>
+

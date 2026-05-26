@@ -1,0 +1,79 @@
+{
+  "study_version": "pstt-1a-0.1.0",
+  "condition_schema": "2x2x2_processing_visibility_output",
+  "conditions": [
+    {
+      "condition_id": "C1",
+      "processing": "cloud",
+      "visibility": "manager_visible",
+      "output": "assertive",
+      "processing_text": "このシステムでは、あなたの作業状態に関するデータはクラウドサーバに送信され、そこで処理されます。処理後の結果が画面に表示されます。",
+      "visibility_text": "このシステムの結果は、本人支援と作業環境改善のために、管理者・教員・雇用者向けのレポートにも含まれる想定です。",
+      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です"
+    },
+    {
+      "condition_id": "C2",
+      "processing": "cloud",
+      "visibility": "manager_visible",
+      "output": "non_assertive",
+      "processing_text": "このシステムでは、あなたの作業状態に関するデータはクラウドサーバに送信され、そこで処理されます。処理後の結果が画面に表示されます。",
+      "visibility_text": "このシステムの結果は、本人支援と作業環境改善のために、管理者・教員・雇用者向けのレポートにも含まれる想定です。",
+      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す"
+    },
+    {
+      "condition_id": "C3",
+      "processing": "cloud",
+      "visibility": "self_only",
+      "output": "assertive",
+      "processing_text": "このシステムでは、あなたの作業状態に関するデータはクラウドサーバに送信され、そこで処理されます。処理後の結果が画面に表示されます。",
+      "visibility_text": "このシステムの結果は本人にのみ表示され、管理者・教員・雇用者向けのレポートには含まれない想定です。",
+      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です"
+    },
+    {
+      "condition_id": "C4",
+      "processing": "cloud",
+      "visibility": "self_only",
+      "output": "non_assertive",
+      "processing_text": "このシステムでは、あなたの作業状態に関するデータはクラウドサーバに送信され、そこで処理されます。処理後の結果が画面に表示されます。",
+      "visibility_text": "このシステムの結果は本人にのみ表示され、管理者・教員・雇用者向けのレポートには含まれない想定です。",
+      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す"
+    },
+    {
+      "condition_id": "C5",
+      "processing": "local",
+      "visibility": "manager_visible",
+      "output": "assertive",
+      "processing_text": "このシステムでは、あなたの作業状態に関するデータはあなたの端末内でのみ処理され、クラウドサーバには送信されません。処理後の結果が画面に表示されます。",
+      "visibility_text": "このシステムの結果は、本人支援と作業環境改善のために、管理者・教員・雇用者向けのレポートにも含まれる想定です。",
+      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です"
+    },
+    {
+      "condition_id": "C6",
+      "processing": "local",
+      "visibility": "manager_visible",
+      "output": "non_assertive",
+      "processing_text": "このシステムでは、あなたの作業状態に関するデータはあなたの端末内でのみ処理され、クラウドサーバには送信されません。処理後の結果が画面に表示されます。",
+      "visibility_text": "このシステムの結果は、本人支援と作業環境改善のために、管理者・教員・雇用者向けのレポートにも含まれる想定です。",
+      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す"
+    },
+    {
+      "condition_id": "C7",
+      "processing": "local",
+      "visibility": "self_only",
+      "output": "assertive",
+      "processing_text": "このシステムでは、あなたの作業状態に関するデータはあなたの端末内でのみ処理され、クラウドサーバには送信されません。処理後の結果が画面に表示されます。",
+      "visibility_text": "このシステムの結果は本人にのみ表示され、管理者・教員・雇用者向けのレポートには含まれない想定です。",
+      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です"
+    },
+    {
+      "condition_id": "C8",
+      "processing": "local",
+      "visibility": "self_only",
+      "output": "non_assertive",
+      "processing_text": "このシステムでは、あなたの作業状態に関するデータはあなたの端末内でのみ処理され、クラウドサーバには送信されません。処理後の結果が画面に表示されます。",
+      "visibility_text": "このシステムの結果は本人にのみ表示され、管理者・教員・雇用者向けのレポートには含まれない想定です。",
+      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す"
+    }
+  ]
+}
+
