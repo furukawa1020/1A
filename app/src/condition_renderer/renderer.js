@@ -27,7 +27,7 @@
   function renderConditionText(fragment, condition) {
     fragment.querySelector("#processingText").textContent = condition.processing_text;
     fragment.querySelector("#visibilityText").textContent = condition.visibility_text;
-    renderOutput(fragment.querySelector("#outputText"), condition.output_text);
+    renderOutput(fragment.querySelector("#outputText"), "PRESENCE Guardがclaimを判定しています。");
     renderScenario(fragment.querySelector("#scenarioText"));
   }
 
@@ -141,6 +141,7 @@
 
   PSTT.Renderer = {
     renderConditionText,
+    renderOutput,
     conditionToClaimRequest,
     renderQuestionnaire,
     collectFormValues,

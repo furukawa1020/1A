@@ -161,13 +161,25 @@
     const fragment = cloneTemplate("conditionTemplate");
     PSTT.Renderer.renderConditionText(fragment, condition);
     const guardDecisionNode = fragment.querySelector("#guardDecision");
+    const outputNode = fragment.querySelector("#outputText");
     if (guardDecisionNode && global.PresenceGuard) {
       global.PresenceGuard.load("policies/presence.guard.policy.json").then((guard) => {
         const request = PSTT.Renderer.conditionToClaimRequest(condition);
-        guardDecisionNode.textContent = JSON.stringify(guard.requestClaim(request), null, 2);
+        const decision = guard.requestClaim(request);
+        guardDecisionNode.textContent = JSON.stringify(decision, null, 2);
+        if (decision.decision === "allow") {
+          PSTT.Renderer.renderOutput(outputNode, decision.text || request.proposedText);
+        } else if (decision.decision === "rewrite") {
+          PSTT.Renderer.renderOutput(outputNode, decision.suggestedTextJa || decision.suggestedText);
+        } else {
+          PSTT.Renderer.renderOutput(outputNode, "このclaimはPRESENCE Guardにより表示されません。");
+        }
       }).catch((error) => {
         guardDecisionNode.textContent = `PRESENCE Guard policy load failed: ${error.message}`;
+        PSTT.Renderer.renderOutput(outputNode, "PRESENCE Guard policyを読み込めないため、状態claimは表示されません。");
       });
+    } else {
+      PSTT.Renderer.renderOutput(outputNode, "PRESENCE Guardが利用できないため、状態claimは表示されません。");
     }
     const questionGroups = fragment.querySelector("#questionGroups");
     const savedValues = session.drafts[condition.condition_id] || {};
