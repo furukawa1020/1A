@@ -4,67 +4,40 @@
 
 ### Design
 
-We conduct a 2 x 2 x 2 within-subject factorial scenario experiment.
+Paper 1A is a design-audit systems paper. We define PRESENCE, implement `presence-audit`, and apply it to representative presenteeism support system specifications.
 
-### Factors
+### Audit Procedure
 
-- Processing Location: Cloud vs. Local.
-- Third-party Visibility: Manager-visible vs. Self-only.
-- Output Claim: Assertive Label vs. Non-assertive Cue.
+The audit procedure is:
 
-### Procedure
+1. Write the target system use case.
+2. Describe data signals, processing, retention, and identifiability.
+3. Describe visibility to users, supporters, managers, teachers, employers, and evaluators.
+4. List system-generated claims and assign claim severity.
+5. List actions and controls.
+6. Generate claim-flow, boundary analysis, surveillance transmutation patterns, PRESENCE score, and mitigations.
 
-Participants read a common presenteeism scenario and then evaluate eight controlled system conditions. The UI layout, colors, typography, block count, and response items are held constant. Only processing text, visibility text, and output text vary.
+### 1B Validation Path
 
-### Measures
-
-The study measures:
-
-- MFS,
-- LIS,
-- SOUS,
-- WU,
-- WD,
-- manipulation checks,
-- free-text explanation.
-
-ESS is computed by researchers as a design audit score and is not collected as participant self-report.
-
-### Ethics
-
-The study is scenario-based. It does not induce actual presenteeism and does not share results with managers, teachers, employers, or other third parties.
+The 2 x 2 x 2 participant-facing scenario experiment is retained as the validation path for Paper 1B, not as the primary artifact of Paper 1A.
 
 ## 日本語
 
 ### デザイン
 
-2 x 2 x 2 の被験者内シナリオベース因子実験を実施する。
+Paper 1Aは設計監査システム論文である。PRESENCEを定義し、`presence-audit`を実装し、代表的なプレゼンティーズム支援システム仕様に適用する。
 
-### 因子
+### 監査手順
 
-- 処理場所: Cloud vs. Local。
-- 第三者可視性: Manager-visible vs. Self-only。
-- 出力主張: Assertive Label vs. Non-assertive Cue。
+監査手順は次である。
 
-### 手続き
+1. 対象システムのuse caseを書く。
+2. データ信号、処理場所、保持、識別可能性を書く。
+3. ユーザー、支援者、管理者、教員、雇用者、評価者への可視性を書く。
+4. システム生成claimを列挙し、claim severityを割り当てる。
+5. actionとcontrolを書く。
+6. claim-flow、boundary analysis、surveillance transmutation patterns、PRESENCE score、mitigationを生成する。
 
-参加者は共通のプレゼンティーズムシナリオを読み、その後、統制された8つのシステム条件を評価する。UIレイアウト、色、タイポグラフィ、ブロック数、回答項目は一定に保つ。変化するのは、処理場所の文面、可視性の文面、出力の文面のみである。
+### 1B妥当性検証への接続
 
-### 尺度
-
-本研究では次を測定する。
-
-- MFS。
-- LIS。
-- SOUS。
-- WU。
-- WD。
-- 操作チェック。
-- 自由記述による説明。
-
-ESSは研究者が設計監査スコアとして計算するものであり、参加者の自己報告として収集しない。
-
-### 倫理
-
-本研究はシナリオベースである。実際のプレゼンティーズムを誘導せず、結果を管理者、教員、雇用者、その他第三者へ共有しない。
-
+2 x 2 x 2 の参加者向けシナリオ実験は、Paper 1Aの主成果物ではなく、Paper 1Bでの妥当性検証経路として残す。

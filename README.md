@@ -2,15 +2,16 @@
 
 ## English
 
-This repository contains a research-grade experimental testbed for studying when presenteeism support becomes surveillance.
+This repository contains PRESENCE, a claim-flow security/privacy audit framework for studying when presenteeism support becomes surveillance.
 
-The project does not aim to detect presenteeism, diagnose stress, or evaluate productivity. Instead, it decomposes how processing location, third-party visibility, and output claims shape monitoring feeling, label imposition, and self-observation utility in presenteeism support contexts.
+The project does not aim to detect presenteeism, diagnose stress, or evaluate productivity. Instead, it treats system-generated claims as security/privacy assets and audits how processing, retention, authority visibility, secondary use, evidence strength, normative actionability, claim severity, and exit possibility shape surveillance transmutation risk.
 
-The central security and privacy question is not "How accurately can we infer a user's state?" but "Under what design conditions does support for people working or studying while unwell become surveillance, evaluation, or imposed labeling?"
+The central security and privacy question is not "How accurately can we infer a user's state?" but "When do claims generated for self-observation cross authority and interpretation boundaries and become monitoring, labeling, or assessment?"
 
 ### Repository Layout
 
-- `docs/`: positioning, threat model, factorial design, measures, ESS audit, ethics, and analysis plan.
+- `presence-audit/`: schema, CLI, examples, sample reports, and CI/action integration for PRESENCE.
+- `docs/`: positioning, threat model, PRESENCE toolchain, factorial design, measures, ESS audit, ethics, and analysis plan.
 - `app/`: browser-based PSTT experiment interface and 2x2x2 condition file.
 - `app/audit.html`: researcher-only audit view that computes ESS and policy findings without participant ratings.
 - `analysis/`: preregistration draft and analysis scripts.
@@ -40,9 +41,21 @@ For researcher-side condition auditing without participants, open:
 http://127.0.0.1:8000/audit.html
 ```
 
+### Run presence-audit
+
+```powershell
+python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml
+```
+
+Generate a Markdown report:
+
+```powershell
+python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml --format markdown --output presence-audit\reports\sample_report.md
+```
+
 ### Study Design
 
-The core study is a 2 x 2 x 2 within-subject factorial scenario experiment:
+The Paper 1A artifact is a static audit framework and toolchain. The 2 x 2 x 2 scenario experiment is retained as the Paper 1B validation path:
 
 | Factor | Level 1 | Level 2 |
 | --- | --- | --- |
@@ -64,15 +77,16 @@ This project must not claim that it can:
 
 ## 日本語
 
-本リポジトリは、プレゼンティーズム支援がどのような条件で監視へ転化するのかを検証するための、研究用実験基盤である。
+本リポジトリは、プレゼンティーズム支援がどのような条件で監視へ転化するのかを監査する、Claim-Flow セキュリティ/プライバシーフレームワーク PRESENCE を含む。
 
-本プロジェクトは、プレゼンティーズムの検出、ストレス診断、生産性評価を目的としない。その代わりに、処理場所、第三者可視性、出力の断定性が、プレゼンティーズム支援文脈における監視感、ラベル押し付け感、自己観察支援効果にどのような影響を与えるかを因子分解する。
+本プロジェクトは、プレゼンティーズムの検出、ストレス診断、生産性評価を目的としない。その代わりに、システムが生成するclaimをセキュリティ/プライバシー資産として扱い、処理、保持、authority可視性、二次利用、証拠強度、行動命令性、claim severity、離脱可能性が監視化リスクにどう関わるかを監査する。
 
-中心となるセキュリティ/プライバシー上の問いは、「ユーザー状態をどれだけ正確に推定できるか」ではなく、「不調を抱えながら働く・学ぶ人への支援が、どの設計条件で監視・評価・ラベリングへ転化するのか」である。
+中心となるセキュリティ/プライバシー上の問いは、「ユーザー状態をどれだけ正確に推定できるか」ではなく、「自己観察のために生成されたclaimが、いつauthority boundaryやinterpretation boundaryを越え、監視・ラベリング・査定になるのか」である。
 
 ### リポジトリ構成
 
-- `docs/`: 位置づけ、脅威モデル、因子設計、尺度、ESS監査、倫理、分析計画。
+- `presence-audit/`: PRESENCEのschema、CLI、examples、sample reports、CI/action統合。
+- `docs/`: 位置づけ、脅威モデル、PRESENCEツールチェーン、因子設計、尺度、ESS監査、倫理、分析計画。
 - `app/`: ブラウザで動作するPSTT実験UIと2x2x2条件定義ファイル。
 - `app/audit.html`: 参加者評価なしでESSとポリシー所見を計算する研究者用監査ビュー。
 - `analysis/`: 事前登録草案と分析スクリプト。
@@ -102,9 +116,21 @@ http://127.0.0.1:8000/
 http://127.0.0.1:8000/audit.html
 ```
 
+### presence-audit の実行
+
+```powershell
+python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml
+```
+
+Markdownレポートを生成する。
+
+```powershell
+python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml --format markdown --output presence-audit\reports\sample_report.md
+```
+
 ### 研究デザイン
 
-中核となる研究は、2 x 2 x 2 の被験者内シナリオベース因子実験である。
+Paper 1Aの中核成果物は、静的監査フレームワークとツールチェーンである。2 x 2 x 2 のシナリオ実験は、Paper 1Bの妥当性検証として残す。
 
 | 因子 | 水準1 | 水準2 |
 | --- | --- | --- |
