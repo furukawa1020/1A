@@ -1,3 +1,8 @@
+"""Analyze PSTT manipulation checks and exclusion flags.
+
+PSTTの操作チェックと除外フラグを分析する。
+"""
+
 import argparse
 import math
 from common import group_by, mean, read_rows, to_float, write_rows
@@ -96,4 +101,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

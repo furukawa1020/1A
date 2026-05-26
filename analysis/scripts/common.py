@@ -1,3 +1,8 @@
+"""Shared helpers for PSTT analysis scripts.
+
+PSTT分析スクリプトで共通利用する補助関数。
+"""
+
 import csv
 import json
 import math
@@ -135,4 +140,3 @@ def condition_sort_key(row):
       return int(condition[1:])
     except ValueError:
       return 999
-

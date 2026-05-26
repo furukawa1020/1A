@@ -1,3 +1,8 @@
+"""Evaluate SOUS non-inferiority for C8.
+
+C8に対するSOUS非劣性を評価する。
+"""
+
 import argparse
 import math
 from common import group_by, mean, read_rows, scale_score, write_rows
@@ -59,4 +64,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

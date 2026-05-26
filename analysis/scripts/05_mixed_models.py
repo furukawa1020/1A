@@ -1,3 +1,8 @@
+"""Run mixed-model analysis or fall back to cell means.
+
+混合モデル分析を実行し、利用できない場合はセル平均へフォールバックする。
+"""
+
 import argparse
 from common import SCALE_ITEMS, add_scale_scores, group_by, mean, read_rows, to_float, write_rows
 
@@ -67,4 +72,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

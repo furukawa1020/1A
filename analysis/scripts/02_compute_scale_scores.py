@@ -1,3 +1,8 @@
+"""Compute MFS, LIS, SOUS, WU, and WD scale scores.
+
+MFS、LIS、SOUS、WU、WDの尺度得点を計算する。
+"""
+
 import argparse
 from common import SCALE_ITEMS, add_scale_scores, read_rows, write_rows
 
@@ -20,4 +25,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -1,3 +1,8 @@
+"""Validate the 2x2x2 PSTT condition file.
+
+PSTTの2x2x2条件定義ファイルを検証する。
+"""
+
 import argparse
 import json
 from pathlib import Path
@@ -63,4 +68,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

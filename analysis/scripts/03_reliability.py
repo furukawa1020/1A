@@ -1,3 +1,8 @@
+"""Compute reliability estimates for PSTT scales.
+
+PSTT尺度の信頼性推定値を計算する。
+"""
+
 import argparse
 import math
 from common import SCALE_ITEMS, read_rows, to_float, write_rows
@@ -96,4 +101,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

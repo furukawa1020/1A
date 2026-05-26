@@ -1,3 +1,8 @@
+"""Create draft HTML figures for PSTT condition means.
+
+PSTT条件平均のドラフトHTML図を作成する。
+"""
+
 import argparse
 from collections import defaultdict
 from common import SCALE_ITEMS, add_scale_scores, group_by, mean, read_rows, to_float
@@ -70,4 +75,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

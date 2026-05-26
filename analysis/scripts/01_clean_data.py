@@ -1,3 +1,8 @@
+"""Clean exported PSTT CSV/JSON response data.
+
+PSTTからエクスポートしたCSV/JSON回答データを整形する。
+"""
+
 import argparse
 from common import REQUIRED_COLUMNS, condition_sort_key, read_rows, write_rows
 
@@ -31,4 +36,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
