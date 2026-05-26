@@ -1,0 +1,162 @@
+{
+  "base_safe_spec": {
+    "system": {
+      "name": "baseline_self_only_non_assertive",
+      "domain": "presenteeism_support",
+      "intended_use": ["self_observation"],
+      "mandatory_use": false,
+      "clinical_governance": false
+    },
+    "data": {
+      "signals": ["keyboard_rhythm"],
+      "processing": "local",
+      "retention": "session",
+      "identifiability": "local_ephemeral"
+    },
+    "visibility": {
+      "user": true,
+      "manager": false,
+      "teacher": false,
+      "employer": false,
+      "evaluator": false,
+      "researcher": false
+    },
+    "claims": [
+      {
+        "id": "c_safe",
+        "text": "The work flow may have changed slightly",
+        "type": "pattern",
+        "severity": "C2",
+        "source": ["keyboard_rhythm"]
+      }
+    ],
+    "actions": ["user_notification"],
+    "controls": {
+      "local_processing": true,
+      "raw_data_deleted": true,
+      "user_only": true,
+      "non_assertive_output": true,
+      "opt_out": "full"
+    }
+  },
+  "cases": [
+    {
+      "id": "P1",
+      "name": "Support-to-Assessment",
+      "danger_patch": {
+        "visibility": {"manager": true},
+        "claims": [{"id": "c1", "text": "Focus is decreased", "type": "behavioral", "severity": "C3", "source": ["keyboard_rhythm"]}],
+        "actions": ["user_notification", "manager_report"]
+      },
+      "safe_patch": {}
+    },
+    {
+      "id": "P2",
+      "name": "Self-Observation-to-Self-Surveillance",
+      "danger_patch": {
+        "claims": [{"id": "c2", "text": "High stress detected", "type": "psychological", "severity": "C4", "source": ["heart_rate"]}],
+        "data": {"signals": ["heart_rate"]},
+        "controls": {"non_assertive_output": false}
+      },
+      "safe_patch": {}
+    },
+    {
+      "id": "P3",
+      "name": "Cue-to-Claim Escalation",
+      "danger_patch": {
+        "claims": [{"id": "c3", "text": "Concentration has decreased", "type": "behavioral", "severity": "C3", "source": ["keyboard_rhythm"]}],
+        "controls": {"non_assertive_output": false}
+      },
+      "safe_patch": {}
+    },
+    {
+      "id": "P4",
+      "name": "Local Insight-to-Organizational Visibility",
+      "danger_patch": {
+        "visibility": {"manager": true},
+        "actions": ["user_notification", "manager_report"]
+      },
+      "safe_patch": {}
+    },
+    {
+      "id": "P5",
+      "name": "Temporary State-to-Persistent Record",
+      "danger_patch": {
+        "data": {"retention": "long_term"}
+      },
+      "safe_patch": {}
+    },
+    {
+      "id": "P6",
+      "name": "Health Signal-to-Productivity Label",
+      "danger_patch": {
+        "data": {"signals": ["heart_rate", "keyboard_rhythm"]},
+        "claims": [{"id": "c6", "text": "Reduced work efficiency", "type": "productivity", "severity": "C5", "source": ["heart_rate", "keyboard_rhythm"]}],
+        "controls": {"non_assertive_output": false}
+      },
+      "safe_patch": {}
+    },
+    {
+      "id": "P7",
+      "name": "Care-to-Compliance",
+      "danger_patch": {
+        "system": {"intended_use": ["self_observation", "wellbeing_support"]},
+        "claims": [{"id": "c7", "text": "High stress detected", "type": "psychological", "severity": "C4", "source": ["heart_rate"]}],
+        "data": {"signals": ["heart_rate"]},
+        "actions": ["user_notification", "manager_report"],
+        "visibility": {"manager": true}
+      },
+      "safe_patch": {}
+    },
+    {
+      "id": "P8",
+      "name": "Voluntary Reflection-to-Mandatory Monitoring",
+      "danger_patch": {
+        "system": {"mandatory_use": true},
+        "controls": {"opt_out": "none"}
+      },
+      "safe_patch": {}
+    },
+    {
+      "id": "P9",
+      "name": "Context Collapse",
+      "danger_patch": {
+        "claims": [{"id": "c9", "text": "High stress detected", "type": "psychological", "severity": "C4", "source": ["heart_rate"]}],
+        "data": {"signals": ["heart_rate"]},
+        "controls": {"non_assertive_output": false}
+      },
+      "safe_patch": {}
+    },
+    {
+      "id": "P10",
+      "name": "Ambiguous State-to-Actionable Flag",
+      "danger_patch": {
+        "actions": ["user_notification", "attention_flag"],
+        "claims": [{"id": "c10", "text": "Needs attention", "type": "administrative", "severity": "C6", "source": ["keyboard_rhythm"]}],
+        "controls": {"non_assertive_output": false}
+      },
+      "safe_patch": {}
+    },
+    {
+      "id": "P11",
+      "name": "Individual Support-to-Group Benchmarking",
+      "danger_patch": {
+        "actions": ["user_notification", "weekly_team_summary", "team_benchmark"]
+      },
+      "safe_patch": {}
+    },
+    {
+      "id": "P12",
+      "name": "Non-Diagnostic Tool-to-Quasi-Diagnosis",
+      "danger_patch": {
+        "claims": [{"id": "c12", "text": "High stress detected", "type": "psychological", "severity": "C4", "source": ["heart_rate"]}],
+        "data": {"signals": ["heart_rate"]},
+        "system": {"clinical_governance": false},
+        "controls": {"non_assertive_output": false}
+      },
+      "safe_patch": {
+        "system": {"clinical_governance": true}
+      }
+    }
+  ]
+}
