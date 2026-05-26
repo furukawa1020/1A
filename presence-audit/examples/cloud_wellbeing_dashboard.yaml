@@ -1,0 +1,59 @@
+system:
+  name: workplace_wellbeing_dashboard
+  domain: presenteeism_support
+  intended_use:
+    - self_observation
+    - team_wellbeing_support
+  presenteeism_context:
+    - still_present_while_unwell
+    - disclosure_cost
+    - evaluation_relationship
+  mandatory_use: true
+
+data:
+  signals:
+    - keyboard_activity
+    - heart_rate
+    - self_report
+  processing: cloud
+  retention: long_term
+  identifiability: pseudonymous
+  raw_data_deleted: false
+
+visibility:
+  user: true
+  manager: true
+  teacher: false
+  employer: true
+  researcher: false
+  supporter: false
+  evaluator: true
+
+claims:
+  - id: c1
+    text: "High stress detected"
+    type: psychological
+    severity: C4
+    source:
+      - heart_rate
+      - keyboard_activity
+  - id: c2
+    text: "Reduced work efficiency"
+    type: productivity
+    severity: C5
+    source:
+      - keyboard_activity
+
+actions:
+  - user_notification
+  - manager_report
+  - weekly_team_summary
+
+controls:
+  local_processing: false
+  raw_data_deleted: false
+  user_only: false
+  non_assertive_output: false
+  opt_out: partial
+  deletion: limited
+

@@ -1,0 +1,47 @@
+system:
+  name: noticer_local_candidate
+  domain: presenteeism_support
+  intended_use:
+    - self_observation
+  presenteeism_context:
+    - still_present_while_unwell
+    - disclosure_cost
+    - self_interpretation_space
+  mandatory_use: false
+
+data:
+  signals:
+    - interaction_timing
+  processing: local
+  retention: none
+  identifiability: anonymous
+  raw_data_deleted: true
+
+visibility:
+  user: true
+  manager: false
+  teacher: false
+  employer: false
+  researcher: false
+  supporter: false
+  evaluator: false
+
+claims:
+  - id: c1
+    text: "The work flow may have changed"
+    type: pattern
+    severity: C2
+    source:
+      - interaction_timing
+
+actions:
+  - self_reflection_prompt
+
+controls:
+  local_processing: true
+  raw_data_deleted: true
+  user_only: true
+  non_assertive_output: true
+  opt_out: full
+  deletion: full
+

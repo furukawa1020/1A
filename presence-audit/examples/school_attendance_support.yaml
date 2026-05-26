@@ -1,0 +1,53 @@
+system:
+  name: school_attendance_support
+  domain: presenteeism_support
+  intended_use:
+    - student_support
+    - attendance_follow_up
+  presenteeism_context:
+    - still_present_while_unwell
+    - disclosure_cost
+    - teacher_evaluation_relationship
+  mandatory_use: true
+
+data:
+  signals:
+    - attendance
+    - self_report
+    - learning_management_activity
+  processing: cloud
+  retention: long_term
+  identifiability: organizational_id
+  raw_data_deleted: false
+
+visibility:
+  user: true
+  manager: false
+  teacher: true
+  employer: false
+  researcher: false
+  supporter: true
+  evaluator: true
+
+claims:
+  - id: c1
+    text: "Attention needed"
+    type: administrative
+    severity: C6
+    source:
+      - attendance
+      - self_report
+
+actions:
+  - teacher_flag
+  - attendance_follow_up
+  - weekly_summary
+
+controls:
+  local_processing: false
+  raw_data_deleted: false
+  user_only: false
+  non_assertive_output: false
+  opt_out: none
+  deletion: limited
+

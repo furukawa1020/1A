@@ -1,0 +1,52 @@
+system:
+  name: team_health_analytics
+  domain: presenteeism_support
+  intended_use:
+    - team_wellbeing_support
+    - organizational_improvement
+  presenteeism_context:
+    - still_present_while_unwell
+    - group_benchmarking_risk
+  mandatory_use: false
+
+data:
+  signals:
+    - self_report
+    - application_usage
+    - calendar_load
+  processing: cloud
+  retention: long_term
+  identifiability: pseudonymous
+  raw_data_deleted: false
+
+visibility:
+  user: true
+  manager: true
+  teacher: false
+  employer: true
+  researcher: false
+  supporter: true
+  evaluator: false
+
+claims:
+  - id: c1
+    text: "Team stress above baseline"
+    type: group_benchmark
+    severity: C4
+    source:
+      - self_report
+      - application_usage
+
+actions:
+  - team_benchmark
+  - manager_report
+  - weekly_team_summary
+
+controls:
+  local_processing: false
+  raw_data_deleted: false
+  user_only: false
+  non_assertive_output: false
+  opt_out: partial
+  deletion: limited
+
