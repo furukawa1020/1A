@@ -1,2 +1,5 @@
 定義書.md
+__pycache__/
+*.pyc
+analysis/outputs/
 
