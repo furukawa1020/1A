@@ -4,26 +4,26 @@
 
 ### Full Title
 
-PRESENCE: Claim-Flow Threat Modeling for Surveillance Transmutation in Presenteeism Support Systems
+PRESENCE Guard: Claim-Capability Enforcement Middleware for Presenteeism Support Systems
 
 ### Subtitle
 
-A Design Audit Framework for Support, Visibility, and Assertive Claims in Health-Work-Evaluation Contexts
+Enforcing Claim Severity, Authority Boundaries, and Interpretation Boundaries in Health-Work-Evaluation Contexts
 
 ### Short Title
 
-PRESENCE
+PRESENCE Guard
 
 ## 日本語
 
 ### 正式タイトル
 
-PRESENCE: プレゼンティーズム支援システムにおける監視化リスクのためのClaim-Flow脅威モデリング
+PRESENCE Guard: プレゼンティーズム支援システムのためのClaim制御ミドルウェア
 
 ### 副題
 
-健康・作業・評価関係が交差する支援システムの設計監査フレームワーク
+健康・作業・評価関係が交差する支援システムにおけるClaim Severity・Authority Boundary・Interpretation Boundaryの強制
 
 ### ショートタイトル
 
-PRESENCE
+PRESENCE Guard

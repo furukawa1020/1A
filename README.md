@@ -2,15 +2,21 @@
 
 ## English
 
-This repository contains PRESENCE, a claim-flow security/privacy audit framework for studying when presenteeism support becomes surveillance.
+This repository contains PRESENCE Guard, claim-capability enforcement middleware for preventing surveillance transmutation in presenteeism support systems.
 
-The project does not aim to detect presenteeism, diagnose stress, or evaluate productivity. Instead, it treats system-generated claims as security/privacy assets and audits how processing, retention, authority visibility, secondary use, evidence strength, normative actionability, claim severity, and exit possibility shape surveillance transmutation risk.
+The project does not aim to detect presenteeism, diagnose stress, or evaluate productivity. Instead, it treats system-generated claims as security/privacy control objects and enforces how processing, retention, authority visibility, secondary use, evidence strength, normative actionability, claim severity, and exit possibility shape what a system may say.
 
 The central security and privacy question is not "How accurately can we infer a user's state?" but "When do claims generated for self-observation cross authority and interpretation boundaries and become monitoring, labeling, or assessment?"
 
 ### Repository Layout
 
-- `presence-audit/`: schema, CLI, examples, sample reports, and CI/action integration for PRESENCE.
+- `presence-core/`: runtime decision model for claim-capability enforcement.
+- `presence-policy/`: default deny-by-default PRESENCE Guard policy.
+- `presence-sdk-js/`: Web/JavaScript runtime guard SDK.
+- `presence-sdk-dart/`: Dart/Flutter API sketch.
+- `presence-ffi-c/`: embedded-style C ABI sketch.
+- `presence-audit/`: schema, CLI, examples, sample reports, policy bundle commands, mutation tests, and CI/action integration.
+- `presence-security/`: threat model, security requirements, evaluation plan, and prototype SBOM.
 - `docs/`: positioning, threat model, PRESENCE toolchain, factorial design, measures, ESS audit, ethics, and analysis plan.
 - `app/`: browser-based PSTT experiment interface and 2x2x2 condition file.
 - `app/audit.html`: researcher-only audit view that computes ESS and policy findings without participant ratings.
@@ -47,6 +53,13 @@ http://127.0.0.1:8000/audit.html
 python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml
 ```
 
+### Run PRESENCE Guard
+
+```powershell
+python presence-audit\cli\presence_audit.py guard presence-policy\presence.guard.policy.json presence-tests\fixtures\request_high_stress_self.json
+node presence-sdk-js\test\guard_smoke_test.js
+```
+
 Generate a Markdown report:
 
 ```powershell
@@ -77,15 +90,21 @@ This project must not claim that it can:
 
 ## 日本語
 
-本リポジトリは、プレゼンティーズム支援がどのような条件で監視へ転化するのかを監査する、Claim-Flow セキュリティ/プライバシーフレームワーク PRESENCE を含む。
+本リポジトリは、プレゼンティーズム支援システムにおける監視化転化を防ぐための claim-capability enforcement middleware、PRESENCE Guard を含む。
 
-本プロジェクトは、プレゼンティーズムの検出、ストレス診断、生産性評価を目的としない。その代わりに、システムが生成するclaimをセキュリティ/プライバシー資産として扱い、処理、保持、authority可視性、二次利用、証拠強度、行動命令性、claim severity、離脱可能性が監視化リスクにどう関わるかを監査する。
+本プロジェクトは、プレゼンティーズムの検出、ストレス診断、生産性評価を目的としない。その代わりに、システムが生成するclaimをセキュリティ/プライバシー上の制御対象として扱い、処理、保持、authority可視性、二次利用、証拠強度、行動命令性、claim severity、離脱可能性に基づいて、システムが何を言ってよいかを強制する。
 
 中心となるセキュリティ/プライバシー上の問いは、「ユーザー状態をどれだけ正確に推定できるか」ではなく、「自己観察のために生成されたclaimが、いつauthority boundaryやinterpretation boundaryを越え、監視・ラベリング・査定になるのか」である。
 
 ### リポジトリ構成
 
-- `presence-audit/`: PRESENCEのschema、CLI、examples、sample reports、CI/action統合。
+- `presence-core/`: claim-capability enforcementの実行時判定モデル。
+- `presence-policy/`: deny-by-defaultのPRESENCE Guard標準policy。
+- `presence-sdk-js/`: Web/JavaScript runtime guard SDK。
+- `presence-sdk-dart/`: Dart/Flutter API sketch。
+- `presence-ffi-c/`: 組み込み向けC ABI sketch。
+- `presence-audit/`: schema、CLI、examples、sample reports、policy bundle command、mutation test、CI/action統合。
+- `presence-security/`: 脅威モデル、セキュリティ要件、評価計画、prototype SBOM。
 - `docs/`: 位置づけ、脅威モデル、PRESENCEツールチェーン、因子設計、尺度、ESS監査、倫理、分析計画。
 - `app/`: ブラウザで動作するPSTT実験UIと2x2x2条件定義ファイル。
 - `app/audit.html`: 参加者評価なしでESSとポリシー所見を計算する研究者用監査ビュー。
@@ -120,6 +139,13 @@ http://127.0.0.1:8000/audit.html
 
 ```powershell
 python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml
+```
+
+### PRESENCE Guard の実行
+
+```powershell
+python presence-audit\cli\presence_audit.py guard presence-policy\presence.guard.policy.json presence-tests\fixtures\request_high_stress_self.json
+node presence-sdk-js\test\guard_smoke_test.js
 ```
 
 Markdownレポートを生成する。

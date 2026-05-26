@@ -4,7 +4,7 @@
 
 ### Design
 
-Paper 1A is a design-audit systems paper. We define PRESENCE, implement `presence-audit`, and apply it to representative presenteeism support system specifications.
+Paper 1A is a security middleware systems paper. We define PRESENCE Guard, implement runtime claim enforcement, and retain static auditing through `presence-audit`.
 
 ### Audit Procedure
 
@@ -15,7 +15,8 @@ The audit procedure is:
 3. Describe visibility to users, supporters, managers, teachers, employers, and evaluators.
 4. List system-generated claims and assign claim severity.
 5. List actions and controls.
-6. Generate claim-flow, boundary analysis, surveillance transmutation patterns, PRESENCE score, and mitigations.
+6. Enforce or audit claim-flow, boundary analysis, surveillance transmutation patterns, PRESENCE score, and mitigations.
+7. At runtime, call `requestClaim()` before rendering any state claim.
 
 ### 1B Validation Path
 
@@ -25,7 +26,7 @@ The 2 x 2 x 2 participant-facing scenario experiment is retained as the validati
 
 ### デザイン
 
-Paper 1Aは設計監査システム論文である。PRESENCEを定義し、`presence-audit`を実装し、代表的なプレゼンティーズム支援システム仕様に適用する。
+Paper 1Aはセキュリティミドルウェアのシステム論文である。PRESENCE Guardを定義し、runtime claim enforcementを実装し、`presence-audit`による静的監査も保持する。
 
 ### 監査手順
 
@@ -36,7 +37,8 @@ Paper 1Aは設計監査システム論文である。PRESENCEを定義し、`pre
 3. ユーザー、支援者、管理者、教員、雇用者、評価者への可視性を書く。
 4. システム生成claimを列挙し、claim severityを割り当てる。
 5. actionとcontrolを書く。
-6. claim-flow、boundary analysis、surveillance transmutation patterns、PRESENCE score、mitigationを生成する。
+6. claim-flow、boundary analysis、surveillance transmutation patterns、PRESENCE score、mitigationを強制または監査する。
+7. 実行時には、状態claimを表示する前に必ず `requestClaim()` を呼ぶ。
 
 ### 1B妥当性検証への接続
 

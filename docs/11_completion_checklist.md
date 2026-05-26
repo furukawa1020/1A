@@ -7,6 +7,15 @@ This file maps the implementation to the strict Paper 1A completion criteria.
 | Criterion | Current status | Evidence |
 | --- | --- | --- |
 | Claim is treated as a security/privacy asset | Implemented | `presence-audit/schema/presence.schema.json`, `paper/framework.md` |
+| Runtime claim enforcement exists | Implemented | `presence-sdk-js/src/presence-guard.js`, `presence-audit/cli/presence_audit.py guard` |
+| Deny-by-default policy exists | Implemented | `presence-policy/presence.guard.policy.json` |
+| Web SDK exists | Implemented | `presence-sdk-js/` |
+| Dart/Flutter API sketch exists | Implemented | `presence-sdk-dart/` |
+| Embedded C ABI sketch exists | Implemented | `presence-ffi-c/` |
+| Policy signing prototype exists | Implemented | `presence-audit/cli/presence_audit.py compile-policy/verify-policy` |
+| Mutation testing exists | Implemented | `presence-audit/cli/presence_audit.py mutation-test` |
+| Tool threat model exists | Implemented | `presence-security/threat_model.md` |
+| Tool security requirements exist | Implemented | `presence-security/security_requirements.md` |
 | Claim-flow graph is machine-generated | Implemented | `presence-audit/cli/presence_audit.py`, `presence-audit/reports/sample_report.md` |
 | Authority boundary is modeled | Implemented | `presence-audit/cli/presence_audit.py` |
 | Interpretation boundary is modeled | Implemented | `presence-audit/cli/presence_audit.py` |
@@ -44,6 +53,15 @@ This file maps the implementation to the strict Paper 1A completion criteria.
 | 条件 | 現在の状態 | 根拠 |
 | --- | --- | --- |
 | claimをセキュリティ/プライバシー資産として扱う | 実装済み | `presence-audit/schema/presence.schema.json`, `paper/framework.md` |
+| runtime claim enforcementがある | 実装済み | `presence-sdk-js/src/presence-guard.js`, `presence-audit/cli/presence_audit.py guard` |
+| deny-by-default policyがある | 実装済み | `presence-policy/presence.guard.policy.json` |
+| Web SDKがある | 実装済み | `presence-sdk-js/` |
+| Dart/Flutter API sketchがある | 実装済み | `presence-sdk-dart/` |
+| embedded C ABI sketchがある | 実装済み | `presence-ffi-c/` |
+| policy署名プロトタイプがある | 実装済み | `presence-audit/cli/presence_audit.py compile-policy/verify-policy` |
+| mutation testがある | 実装済み | `presence-audit/cli/presence_audit.py mutation-test` |
+| ツール自身の脅威モデルがある | 実装済み | `presence-security/threat_model.md` |
+| ツール自身のセキュリティ要件がある | 実装済み | `presence-security/security_requirements.md` |
 | claim-flow graphを機械生成する | 実装済み | `presence-audit/cli/presence_audit.py`, `presence-audit/reports/sample_report.md` |
 | authority boundaryをモデル化する | 実装済み | `presence-audit/cli/presence_audit.py` |
 | interpretation boundaryをモデル化する | 実装済み | `presence-audit/cli/presence_audit.py` |

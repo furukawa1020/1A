@@ -2,7 +2,7 @@
 
 ## English
 
-`presence-audit` is a PRESENCE command-line tool for auditing surveillance transmutation risk in presenteeism support and well-being support systems.
+`presence-audit` is a PRESENCE command-line tool for auditing and enforcing surveillance transmutation controls in presenteeism support and well-being support systems.
 
 It treats system-generated claims as security/privacy assets. A design YAML file is analyzed for:
 
@@ -19,6 +19,25 @@ It treats system-generated claims as security/privacy assets. A design YAML file
 
 ```powershell
 python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml
+```
+
+Runtime guard decision:
+
+```powershell
+python presence-audit\cli\presence_audit.py guard presence-policy\presence.guard.policy.json presence-tests\fixtures\request_high_stress_self.json
+```
+
+Compile/sign a prototype policy bundle:
+
+```powershell
+python presence-audit\cli\presence_audit.py compile-policy presence-policy\presence.guard.policy.json --output presence-policy\presence.guard.bundle.json --sign-secret dev-secret
+python presence-audit\cli\presence_audit.py verify-policy presence-policy\presence.guard.bundle.json --sign-secret dev-secret
+```
+
+Mutation test:
+
+```powershell
+python presence-audit\cli\presence_audit.py mutation-test presence-audit\examples\noticer_local.yaml
 ```
 
 Generate Markdown:
@@ -42,7 +61,7 @@ python presence-audit\cli\presence_audit.py audit presence.yaml --fail-on HIGH
 
 ## 日本語
 
-`presence-audit` は、プレゼンティーズム支援・ウェルビーイング支援システムにおける監視化転化リスクを監査するPRESENCEコマンドラインツールである。
+`presence-audit` は、プレゼンティーズム支援・ウェルビーイング支援システムにおける監視化転化リスクを監査し、claim制御を実行するPRESENCEコマンドラインツールである。
 
 このツールは、システムが生成するclaimをセキュリティ/プライバシー資産として扱う。設計YAMLを解析し、次を出力する。
 
@@ -59,6 +78,25 @@ python presence-audit\cli\presence_audit.py audit presence.yaml --fail-on HIGH
 
 ```powershell
 python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_wellbeing_dashboard.yaml
+```
+
+runtime guard判定を行う。
+
+```powershell
+python presence-audit\cli\presence_audit.py guard presence-policy\presence.guard.policy.json presence-tests\fixtures\request_high_stress_self.json
+```
+
+プロトタイプpolicy bundleをcompile/signする。
+
+```powershell
+python presence-audit\cli\presence_audit.py compile-policy presence-policy\presence.guard.policy.json --output presence-policy\presence.guard.bundle.json --sign-secret dev-secret
+python presence-audit\cli\presence_audit.py verify-policy presence-policy\presence.guard.bundle.json --sign-secret dev-secret
+```
+
+mutation testを行う。
+
+```powershell
+python presence-audit\cli\presence_audit.py mutation-test presence-audit\examples\noticer_local.yaml
 ```
 
 Markdownを生成する。
@@ -79,4 +117,3 @@ python presence-audit\cli\presence_audit.py audit presence.yaml --fail-on HIGH
 - `MEDIUM`: claimまたは解釈上のリスクがある。
 - `HIGH`: authority可視性、長期保存、高severity claimがある。
 - `CRITICAL`: authority、保存、生産性claim、管理claimが複合する。
-

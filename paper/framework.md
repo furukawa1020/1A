@@ -2,7 +2,7 @@
 
 ## English
 
-PRESENCE treats claims as security/privacy assets. The framework audits how signals become claims and how those claims cross authority and interpretation boundaries.
+PRESENCE Guard treats claims as security/privacy control objects. The framework enforces how signals become claims and whether those claims may cross authority and interpretation boundaries.
 
 ## Components
 
@@ -13,10 +13,12 @@ PRESENCE treats claims as security/privacy assets. The framework audits how sign
 - Surveillance transmutation pattern catalog: P1 through P12.
 - Machine-readable YAML audit spec.
 - CLI report generator.
+- Runtime claim reference monitor.
+- SDK/API integration.
 
 ## 日本語
 
-PRESENCEはclaimをセキュリティ/プライバシー資産として扱う。このフレームワークは、信号がどのようにclaimになり、そのclaimがどのようにauthority boundaryとinterpretation boundaryを越えるかを監査する。
+PRESENCE Guardはclaimをセキュリティ/プライバシー上の制御対象として扱う。このフレームワークは、信号がどのようにclaimになり、そのclaimがauthority boundaryとinterpretation boundaryを越えてよいかを強制する。
 
 ## 構成要素
 
@@ -27,4 +29,5 @@ PRESENCEはclaimをセキュリティ/プライバシー資産として扱う。
 - Surveillance transmutation pattern catalog: P1からP12。
 - 機械可読なYAML監査仕様。
 - CLIレポート生成器。
-
+- runtime claim reference monitor。
+- SDK/API統合。
