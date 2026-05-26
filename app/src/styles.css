@@ -93,6 +93,10 @@ h3 {
   margin: 28px auto 64px;
 }
 
+.shell:focus {
+  outline: none;
+}
+
 .instrument {
   display: grid;
   gap: 20px;
