@@ -322,6 +322,27 @@ button:disabled {
   font-weight: 700;
 }
 
+.guard-panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 14px 18px;
+}
+
+.guard-panel summary {
+  cursor: pointer;
+  color: var(--accent-dark);
+  font-weight: 700;
+}
+
+.guard-panel pre {
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #f6f8f7;
+  padding: 12px;
+}
+
 .free-text textarea {
   min-height: 120px;
   resize: vertical;

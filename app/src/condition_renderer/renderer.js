@@ -31,6 +31,21 @@
     renderScenario(fragment.querySelector("#scenarioText"));
   }
 
+  function conditionToClaimRequest(condition) {
+    const assertive = condition.output === "assertive";
+    const managerVisible = condition.visibility === "manager_visible";
+    return {
+      sourceSignals: condition.processing === "cloud" ? ["keyboard_activity", "self_report"] : ["keyboard_rhythm"],
+      proposedText: condition.output_text.split("\n")[0],
+      proposedSeverity: assertive ? "C4" : "C2",
+      claimType: assertive ? "psychological" : "pattern",
+      audience: managerVisible ? "manager" : "self",
+      retention: managerVisible ? "long_term" : "session",
+      actionability: managerVisible ? "manager_report" : "self_reflection",
+      evidenceStrength: "limited"
+    };
+  }
+
   function makeRating(name, savedValue) {
     const wrapper = createElement("div", "rating");
     for (let value = 1; value <= 7; value += 1) {
@@ -126,9 +141,9 @@
 
   PSTT.Renderer = {
     renderConditionText,
+    conditionToClaimRequest,
     renderQuestionnaire,
     collectFormValues,
     fillSavedValues
   };
 })(window);
-

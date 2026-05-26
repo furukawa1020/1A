@@ -76,6 +76,12 @@
           </article>
         </div>
 
+        <details class="guard-panel">
+          <summary>PRESENCE Guard判定</summary>
+          <p>この判定は参加者回答のための刺激ではなく、同じ出力claimを本番システムに組み込む場合のclaim制御結果です。</p>
+          <pre id="guardDecision"></pre>
+        </details>
+
         <form id="responseForm" class="questionnaire">
           <div id="questionGroups"></div>
           <label class="free-text">
@@ -112,6 +118,7 @@
     <script src="src/questionnaire/items.js"></script>
     <script src="src/manipulation_check/items.js"></script>
     <script src="src/audit/audit.js"></script>
+    <script src="../presence-sdk-js/src/presence-guard.js"></script>
     <script src="src/condition_renderer/renderer.js"></script>
     <script src="src/logger/storage.js"></script>
     <script src="src/export/exporter.js"></script>

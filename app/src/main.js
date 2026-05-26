@@ -160,6 +160,15 @@
 
     const fragment = cloneTemplate("conditionTemplate");
     PSTT.Renderer.renderConditionText(fragment, condition);
+    const guardDecisionNode = fragment.querySelector("#guardDecision");
+    if (guardDecisionNode && global.PresenceGuard) {
+      global.PresenceGuard.load("../presence-policy/presence.guard.policy.json").then((guard) => {
+        const request = PSTT.Renderer.conditionToClaimRequest(condition);
+        guardDecisionNode.textContent = JSON.stringify(guard.requestClaim(request), null, 2);
+      }).catch((error) => {
+        guardDecisionNode.textContent = `PRESENCE Guard policy load failed: ${error.message}`;
+      });
+    }
     const questionGroups = fragment.querySelector("#questionGroups");
     const savedValues = session.drafts[condition.condition_id] || {};
     PSTT.Renderer.renderQuestionnaire(questionGroups, savedValues);
