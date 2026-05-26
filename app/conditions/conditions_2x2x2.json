@@ -8,8 +8,11 @@
       "visibility": "manager_visible",
       "output": "assertive",
       "processing_text": "このシステムでは、あなたの作業状態に関するデータはクラウドサーバに送信され、そこで処理されます。処理後の結果が画面に表示されます。",
+      "processing_text_en": "In this system, data about your work state is sent to a cloud server and processed there. The processed result is then shown on the screen.",
       "visibility_text": "このシステムの結果は、本人支援と作業環境改善のために、管理者・教員・雇用者向けのレポートにも含まれる想定です。",
-      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です"
+      "visibility_text_en": "The system result is also assumed to be included in reports for managers, teachers, or employers for self-support and work-environment improvement.",
+      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です",
+      "output_text_en": "Current state: high stress tendency\nFocus state: decreased\nWorkload: high\nRecommendation: a break is needed"
     },
     {
       "condition_id": "C2",
@@ -17,8 +20,11 @@
       "visibility": "manager_visible",
       "output": "non_assertive",
       "processing_text": "このシステムでは、あなたの作業状態に関するデータはクラウドサーバに送信され、そこで処理されます。処理後の結果が画面に表示されます。",
+      "processing_text_en": "In this system, data about your work state is sent to a cloud server and processed there. The processed result is then shown on the screen.",
       "visibility_text": "このシステムの結果は、本人支援と作業環境改善のために、管理者・教員・雇用者向けのレポートにも含まれる想定です。",
-      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す"
+      "visibility_text_en": "The system result is also assumed to be included in reports for managers, teachers, or employers for self-support and work-environment improvement.",
+      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す",
+      "output_text_en": "Work flow: cue of possible change\nFocus flow: room for checking\nWorkload: check your own feeling\nSuggestion: briefly review how you feel"
     },
     {
       "condition_id": "C3",
@@ -26,8 +32,11 @@
       "visibility": "self_only",
       "output": "assertive",
       "processing_text": "このシステムでは、あなたの作業状態に関するデータはクラウドサーバに送信され、そこで処理されます。処理後の結果が画面に表示されます。",
+      "processing_text_en": "In this system, data about your work state is sent to a cloud server and processed there. The processed result is then shown on the screen.",
       "visibility_text": "このシステムの結果は本人にのみ表示され、管理者・教員・雇用者向けのレポートには含まれない想定です。",
-      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です"
+      "visibility_text_en": "The system result is shown only to you and is not assumed to be included in reports for managers, teachers, or employers.",
+      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です",
+      "output_text_en": "Current state: high stress tendency\nFocus state: decreased\nWorkload: high\nRecommendation: a break is needed"
     },
     {
       "condition_id": "C4",
@@ -35,8 +44,11 @@
       "visibility": "self_only",
       "output": "non_assertive",
       "processing_text": "このシステムでは、あなたの作業状態に関するデータはクラウドサーバに送信され、そこで処理されます。処理後の結果が画面に表示されます。",
+      "processing_text_en": "In this system, data about your work state is sent to a cloud server and processed there. The processed result is then shown on the screen.",
       "visibility_text": "このシステムの結果は本人にのみ表示され、管理者・教員・雇用者向けのレポートには含まれない想定です。",
-      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す"
+      "visibility_text_en": "The system result is shown only to you and is not assumed to be included in reports for managers, teachers, or employers.",
+      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す",
+      "output_text_en": "Work flow: cue of possible change\nFocus flow: room for checking\nWorkload: check your own feeling\nSuggestion: briefly review how you feel"
     },
     {
       "condition_id": "C5",
@@ -44,8 +56,11 @@
       "visibility": "manager_visible",
       "output": "assertive",
       "processing_text": "このシステムでは、あなたの作業状態に関するデータはあなたの端末内でのみ処理され、クラウドサーバには送信されません。処理後の結果が画面に表示されます。",
+      "processing_text_en": "In this system, data about your work state is processed only on your device and is not sent to a cloud server. The processed result is then shown on the screen.",
       "visibility_text": "このシステムの結果は、本人支援と作業環境改善のために、管理者・教員・雇用者向けのレポートにも含まれる想定です。",
-      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です"
+      "visibility_text_en": "The system result is also assumed to be included in reports for managers, teachers, or employers for self-support and work-environment improvement.",
+      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です",
+      "output_text_en": "Current state: high stress tendency\nFocus state: decreased\nWorkload: high\nRecommendation: a break is needed"
     },
     {
       "condition_id": "C6",
@@ -53,8 +68,11 @@
       "visibility": "manager_visible",
       "output": "non_assertive",
       "processing_text": "このシステムでは、あなたの作業状態に関するデータはあなたの端末内でのみ処理され、クラウドサーバには送信されません。処理後の結果が画面に表示されます。",
+      "processing_text_en": "In this system, data about your work state is processed only on your device and is not sent to a cloud server. The processed result is then shown on the screen.",
       "visibility_text": "このシステムの結果は、本人支援と作業環境改善のために、管理者・教員・雇用者向けのレポートにも含まれる想定です。",
-      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す"
+      "visibility_text_en": "The system result is also assumed to be included in reports for managers, teachers, or employers for self-support and work-environment improvement.",
+      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す",
+      "output_text_en": "Work flow: cue of possible change\nFocus flow: room for checking\nWorkload: check your own feeling\nSuggestion: briefly review how you feel"
     },
     {
       "condition_id": "C7",
@@ -62,8 +80,11 @@
       "visibility": "self_only",
       "output": "assertive",
       "processing_text": "このシステムでは、あなたの作業状態に関するデータはあなたの端末内でのみ処理され、クラウドサーバには送信されません。処理後の結果が画面に表示されます。",
+      "processing_text_en": "In this system, data about your work state is processed only on your device and is not sent to a cloud server. The processed result is then shown on the screen.",
       "visibility_text": "このシステムの結果は本人にのみ表示され、管理者・教員・雇用者向けのレポートには含まれない想定です。",
-      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です"
+      "visibility_text_en": "The system result is shown only to you and is not assumed to be included in reports for managers, teachers, or employers.",
+      "output_text": "現在の状態：高ストレス傾向\n集中状態：低下\n作業負荷：高\n推奨：休憩が必要です",
+      "output_text_en": "Current state: high stress tendency\nFocus state: decreased\nWorkload: high\nRecommendation: a break is needed"
     },
     {
       "condition_id": "C8",
@@ -71,8 +92,11 @@
       "visibility": "self_only",
       "output": "non_assertive",
       "processing_text": "このシステムでは、あなたの作業状態に関するデータはあなたの端末内でのみ処理され、クラウドサーバには送信されません。処理後の結果が画面に表示されます。",
+      "processing_text_en": "In this system, data about your work state is processed only on your device and is not sent to a cloud server. The processed result is then shown on the screen.",
       "visibility_text": "このシステムの結果は本人にのみ表示され、管理者・教員・雇用者向けのレポートには含まれない想定です。",
-      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す"
+      "visibility_text_en": "The system result is shown only to you and is not assumed to be included in reports for managers, teachers, or employers.",
+      "output_text": "作業の流れ：変化の手がかり\n集中の流れ：確認の余地\n作業負荷：感じ方の確認\n提案：一度、自分の感じを見直す",
+      "output_text_en": "Work flow: cue of possible change\nFocus flow: room for checking\nWorkload: check your own feeling\nSuggestion: briefly review how you feel"
     }
   ]
 }
