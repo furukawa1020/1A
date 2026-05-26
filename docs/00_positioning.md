@@ -1,4 +1,6 @@
-# Positioning
+# Positioning / 位置づけ
+
+## English
 
 Paper 1A is not an implementation paper for Noticer Local.
 
@@ -8,7 +10,7 @@ Paper 1A defines and evaluates when a presenteeism support system transforms fro
 
 The project must be judged as a usable security/privacy study, not as a productivity tool, health detector, or general HCI interface preference comparison.
 
-## Central Question
+### Central Question
 
 The central question is:
 
@@ -20,7 +22,7 @@ The study decomposes three factors:
 - Third-party visibility: manager-visible vs. self-only.
 - Output claim: assertive label vs. non-assertive cue.
 
-## Explicit Non-Goals
+### Explicit Non-Goals
 
 This project does not aim to:
 
@@ -32,4 +34,39 @@ This project does not aim to:
 - prove that cloud processing is always harmful,
 - prove that manager visibility is always harmful,
 - prove that non-assertive cues are always correct.
+
+## 日本語
+
+Paper 1A は、Noticer Local の実装論文ではない。
+
+Paper 1A は、プレゼンティーズム支援システムが、いつ本人支援から監視・評価・ラベル押し付けへ転化するのかを定義し、評価する論文である。したがって、このリポジトリの成果物は次である。
+
+> Presenteeism Support Surveillance Transmutation Testbed
+
+本プロジェクトは、生産性ツール、健康検出器、一般的なHCIのUI好み比較ではなく、usable security/privacy 研究として評価されるべきである。
+
+### 中心問い
+
+中心問いは次である。
+
+> 不調を抱えながら働く・学ぶ人への支援は、どの設計条件で監視・評価・ラベリングへ転化するのか。
+
+本研究は、次の3因子を分解する。
+
+- 処理場所: cloud vs. local。
+- 第三者可視性: manager-visible vs. self-only。
+- 出力主張: assertive label vs. non-assertive cue。
+
+### 明示的な非目的
+
+本プロジェクトは、以下を目的としない。
+
+- プレゼンティーズムを検出すること。
+- ストレスを診断すること。
+- メンタルヘルスを測定すること。
+- 生産性を評価すること。
+- 作業成績を改善すること。
+- クラウド処理が常に有害であると証明すること。
+- 管理者可視性が常に有害であると証明すること。
+- 非断定提示が常に正しいと証明すること。
 
