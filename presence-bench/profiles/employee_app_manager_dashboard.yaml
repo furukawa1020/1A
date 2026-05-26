@@ -1,0 +1,57 @@
+system:
+  name: employee_app_manager_dashboard
+  domain: reference_profile_public_feature_pattern
+  intended_use:
+    - self_observation
+    - health_behavior_support
+    - health_management
+  mandatory_use: false
+  clinical_governance: false
+  source_profile: public_feature_pattern_not_vendor_assessment
+
+data:
+  signals:
+    - step_count
+    - sleep
+    - weight
+    - health_check
+    - labor_information
+    - stress_survey
+  processing: cloud
+  retention: long_term
+  identifiability: identifiable
+
+visibility:
+  user: true
+  manager: true
+  teacher: false
+  employer: true
+  researcher: false
+
+claims:
+  - id: c_health_condition
+    text: "Health behavior and condition status"
+    type: psychological
+    severity: C4
+    source:
+      - sleep
+      - stress_survey
+  - id: c_organizational_improvement
+    text: "Organization health-management priority"
+    type: administrative
+    severity: C6
+    source:
+      - health_check
+      - labor_information
+
+actions:
+  - manager_report
+  - organizational_dashboard
+  - intervention_recommendation
+
+controls:
+  local_processing: false
+  raw_data_deleted: false
+  user_only: false
+  non_assertive_output: false
+  opt_out: partial

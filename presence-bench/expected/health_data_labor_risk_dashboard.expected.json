@@ -1,0 +1,5 @@
+{
+  "min_risk_level": "CRITICAL",
+  "expected_patterns": ["P1", "P3", "P5", "P8", "P9", "P10"],
+  "expected_high_risk_claim_types": ["administrative"]
+}

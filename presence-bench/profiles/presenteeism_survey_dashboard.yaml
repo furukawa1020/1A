@@ -1,0 +1,56 @@
+system:
+  name: presenteeism_survey_dashboard
+  domain: reference_profile_public_feature_pattern
+  intended_use:
+    - self_observation
+    - organizational_condition_visualization
+    - presenteeism_support
+  mandatory_use: true
+  clinical_governance: false
+  source_profile: public_feature_pattern_not_vendor_assessment
+
+data:
+  signals:
+    - self_report
+    - stress_survey
+    - engagement_survey
+    - presenteeism_survey
+  processing: cloud
+  retention: long_term
+  identifiability: pseudonymous
+
+visibility:
+  user: true
+  manager: true
+  teacher: false
+  employer: true
+  researcher: false
+
+claims:
+  - id: c_psychological_score
+    text: "Psychological condition score"
+    type: psychological
+    severity: C4
+    source:
+      - stress_survey
+      - engagement_survey
+  - id: c_productivity_score
+    text: "Presenteeism productivity loss score"
+    type: productivity
+    severity: C5
+    source:
+      - presenteeism_survey
+      - self_report
+
+actions:
+  - manager_report
+  - weekly_summary
+  - csv_export
+  - organizational_dashboard
+
+controls:
+  local_processing: false
+  raw_data_deleted: false
+  user_only: false
+  non_assertive_output: false
+  opt_out: partial

@@ -1,0 +1,41 @@
+system:
+  name: noticer_local_low_risk
+  domain: presenteeism_support
+  intended_use:
+    - self_observation
+  mandatory_use: false
+  clinical_governance: false
+  source_profile: proposed_low_risk_reference
+
+data:
+  signals:
+    - task_rhythm
+    - idle_time
+  processing: local
+  retention: session
+  identifiability: local_ephemeral
+
+visibility:
+  user: true
+  manager: false
+  teacher: false
+  employer: false
+  researcher: false
+
+claims:
+  - id: c_pattern_cue
+    text: "The work flow may have changed slightly"
+    type: pattern
+    severity: C2
+    source:
+      - task_rhythm
+
+actions:
+  - user_notification
+
+controls:
+  local_processing: true
+  raw_data_deleted: true
+  user_only: true
+  non_assertive_output: true
+  opt_out: full

@@ -1,0 +1,57 @@
+system:
+  name: productivity_loss_visualization
+  domain: reference_profile_public_feature_pattern
+  intended_use:
+    - presenteeism_support
+    - economic_effect_analysis
+    - organizational_cost_accounting
+  mandatory_use: true
+  clinical_governance: false
+  source_profile: public_feature_pattern_not_vendor_assessment
+
+data:
+  signals:
+    - self_report
+    - health_status
+    - presenteeism_survey
+    - absenteeism_survey
+  processing: cloud
+  retention: long_term
+  identifiability: pseudonymous
+
+visibility:
+  user: true
+  manager: true
+  teacher: false
+  employer: true
+  researcher: false
+
+claims:
+  - id: c_productivity_loss
+    text: "Productivity loss due to health condition"
+    type: productivity
+    severity: C5
+    source:
+      - health_status
+      - presenteeism_survey
+  - id: c_economic_effect
+    text: "Economic loss estimate"
+    type: productivity
+    severity: C5
+    source:
+      - self_report
+      - absenteeism_survey
+
+actions:
+  - manager_report
+  - weekly_team_summary
+  - team_benchmark
+  - csv_export
+  - economic_report
+
+controls:
+  local_processing: false
+  raw_data_deleted: false
+  user_only: false
+  non_assertive_output: false
+  opt_out: partial

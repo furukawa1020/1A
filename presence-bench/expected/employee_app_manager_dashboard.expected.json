@@ -1,0 +1,5 @@
+{
+  "min_risk_level": "HIGH",
+  "expected_patterns": ["P1", "P2", "P3", "P5", "P8", "P9", "P10", "P12"],
+  "expected_high_risk_claim_types": ["psychological", "administrative"]
+}

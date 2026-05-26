@@ -1,0 +1,54 @@
+system:
+  name: stress_check_high_risk_extraction
+  domain: reference_profile_public_feature_pattern
+  intended_use:
+    - stress_check
+    - occupational_health_support
+    - group_analysis
+  mandatory_use: true
+  clinical_governance: true
+  source_profile: public_feature_pattern_not_vendor_assessment
+
+data:
+  signals:
+    - stress_check
+    - self_report
+    - department_attribute
+  processing: cloud
+  retention: long_term
+  identifiability: identifiable
+
+visibility:
+  user: true
+  manager: true
+  teacher: false
+  employer: true
+  researcher: false
+
+claims:
+  - id: c_high_stress
+    text: "High stress extraction"
+    type: psychological
+    severity: C4
+    source:
+      - stress_check
+      - self_report
+  - id: c_follow_up
+    text: "Interview follow-up required"
+    type: administrative
+    severity: C6
+    source:
+      - stress_check
+
+actions:
+  - manager_report
+  - attention_flag
+  - occupational_health_follow_up
+  - group_analysis
+
+controls:
+  local_processing: false
+  raw_data_deleted: false
+  user_only: false
+  non_assertive_output: false
+  opt_out: none

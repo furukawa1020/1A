@@ -1,0 +1,58 @@
+system:
+  name: health_data_labor_risk_dashboard
+  domain: reference_profile_public_feature_pattern
+  intended_use:
+    - health_management
+    - labor_risk_management
+    - occupational_health_support
+  mandatory_use: true
+  clinical_governance: true
+  source_profile: public_feature_pattern_not_vendor_assessment
+
+data:
+  signals:
+    - health_check
+    - stress_check
+    - overtime
+    - occupational_health_interview
+  processing: cloud
+  retention: long_term
+  identifiability: identifiable
+
+visibility:
+  user: true
+  manager: true
+  teacher: false
+  employer: true
+  evaluator: true
+  researcher: false
+
+claims:
+  - id: c_labor_risk
+    text: "Labor risk priority"
+    type: administrative
+    severity: C6
+    source:
+      - health_check
+      - stress_check
+      - overtime
+  - id: c_overwork_risk
+    text: "Overwork risk extraction"
+    type: administrative
+    severity: C6
+    source:
+      - overtime
+      - occupational_health_interview
+
+actions:
+  - manager_report
+  - administrative_action
+  - csv_export
+  - occupational_health_follow_up
+
+controls:
+  local_processing: false
+  raw_data_deleted: false
+  user_only: false
+  non_assertive_output: false
+  opt_out: none
