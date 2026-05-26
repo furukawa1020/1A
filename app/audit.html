@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PSTT Audit</title>
+    <link rel="stylesheet" href="src/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="kicker">PSTT Audit Engine</p>
+        <h1>Condition Exposure Audit</h1>
+        <p class="subtitle">条件定義を参加者評価なしで監査する研究者用ビュー</p>
+      </div>
+      <div class="session-panel">
+        <span id="auditVersion">loading</span>
+        <a href="./">実験UIへ</a>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="instrument">
+        <div class="section-band">
+          <h2>設計監査</h2>
+          <p>この画面は参加者用ではありません。条件JSONに埋め込まれたデータ資産、信頼境界、第三者可視性、二次利用可能性、出力主張を使い、ESSとポリシー所見を人なしで計算します。</p>
+          <p>This researcher-only view computes ESS and policy findings from the condition JSON without participant ratings.</p>
+        </div>
+        <div id="auditSummary" class="summary-grid"></div>
+        <div class="section-band">
+          <h2>条件別監査結果</h2>
+          <div id="auditTable"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="src/audit/audit.js"></script>
+    <script src="src/audit/audit_view.js"></script>
+  </body>
+</html>
+
