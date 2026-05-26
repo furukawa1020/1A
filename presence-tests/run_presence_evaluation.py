@@ -150,7 +150,7 @@ def evaluate_signature_and_invalid_inputs():
         pa.analyze({"system": {"name": "broken"}})
     except ValueError:
         invalid_spec_rejected = True
-    private_key, public_key = pa.generate_rsa_keypair(1024)
+    private_key, public_key = pa.generate_rsa_keypair(512)
     signed_asym = pa.sign_bundle_asymmetric(policy, private_key)
     asymmetric_signature_ok = pa.verify_bundle_asymmetric(signed_asym, public_key)
     tampered_asym = copy.deepcopy(signed_asym)
