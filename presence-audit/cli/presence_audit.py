@@ -304,6 +304,7 @@ def risk_level(score):
 
 
 def analyze(spec):
+    validate_spec(spec)
     patterns = detect_patterns(spec)
     boundaries = compute_boundaries(spec)
     score = score_presence(spec, patterns, boundaries)
@@ -325,10 +326,54 @@ def analyze(spec):
         "presence_score": score,
         "risk_level": risk_level(score),
         "detected_patterns": [{"id": pattern, "name": PATTERN_NAMES[pattern]} for pattern in patterns],
+        "claim_flow": build_claim_flow(spec),
         "high_risk_claims": high_risk_claims,
         "boundaries": boundaries,
         "recommended_mitigations": list(dict.fromkeys(mitigations)),
     }
+
+
+def validate_spec(spec):
+    required = ["system", "data", "visibility", "claims", "actions", "controls"]
+    missing = [key for key in required if key not in spec]
+    if missing:
+        raise ValueError(f"Missing required top-level keys: {', '.join(missing)}")
+    for key in ["name", "domain", "intended_use"]:
+        if key not in spec["system"]:
+            raise ValueError(f"Missing system.{key}")
+    for key in ["signals", "processing", "retention", "identifiability"]:
+        if key not in spec["data"]:
+            raise ValueError(f"Missing data.{key}")
+    for index, claim in enumerate(spec.get("claims", []), start=1):
+        for key in ["id", "text", "type", "severity"]:
+            if key not in claim:
+                raise ValueError(f"Missing claims[{index}].{key}")
+        if claim["severity"] not in CLAIM_SCORES:
+            raise ValueError(f"Unknown claim severity: {claim['severity']}")
+
+
+def build_claim_flow(spec):
+    actions = spec.get("actions", [])
+    visibility = spec.get("visibility", {})
+    observers = [name for name, enabled in visibility.items() if enabled]
+    flows = []
+    for claim in spec.get("claims", []):
+        sources = claim.get("source") or spec.get("data", {}).get("signals", [])
+        flows.append(
+            {
+                "claim_id": claim.get("id"),
+                "path": {
+                    "signal": sources,
+                    "feature": "derived_feature",
+                    "state_estimate": claim.get("type"),
+                    "label": claim.get("text"),
+                    "claim": claim.get("severity"),
+                    "recommendation_or_action": actions,
+                    "observer": observers,
+                },
+            }
+        )
+    return flows
 
 
 def render_text(result):
@@ -347,6 +392,26 @@ def render_text(result):
     if result["high_risk_claims"]:
         for claim in result["high_risk_claims"]:
             lines.append(f"- {claim.get('text')} -> {claim.get('severity')} {claim.get('type')} claim")
+    else:
+        lines.append("- none")
+    lines.extend(["", "Claim-flow:"])
+    if result["claim_flow"]:
+        for flow in result["claim_flow"]:
+            path = flow["path"]
+            lines.append(
+                "- "
+                + " -> ".join(
+                    [
+                        ",".join(path["signal"]),
+                        path["feature"],
+                        str(path["state_estimate"]),
+                        str(path["label"]),
+                        str(path["claim"]),
+                        ",".join(path["recommendation_or_action"]),
+                        ",".join(path["observer"]),
+                    ]
+                )
+            )
     else:
         lines.append("- none")
     lines.extend(["", "Boundary violations:"])
@@ -379,6 +444,18 @@ def render_markdown(result):
     if result["high_risk_claims"]:
         for claim in result["high_risk_claims"]:
             lines.append(f"- `{claim.get('severity')}` {claim.get('type')}: {claim.get('text')}")
+    else:
+        lines.append("- None")
+    lines.extend(["", "## Claim-Flow"])
+    if result["claim_flow"]:
+        for flow in result["claim_flow"]:
+            path = flow["path"]
+            lines.append(
+                f"- `{flow['claim_id']}` "
+                f"{', '.join(path['signal'])} -> {path['feature']} -> {path['state_estimate']} -> "
+                f"{path['label']} -> {path['claim']} -> {', '.join(path['recommendation_or_action'])} -> "
+                f"{', '.join(path['observer'])}"
+            )
     else:
         lines.append("- None")
     lines.extend(["", "## Boundary Analysis"])

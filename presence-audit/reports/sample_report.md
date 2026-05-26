@@ -20,6 +20,10 @@
 - `C4` psychological: High stress detected
 - `C5` productivity: Reduced work efficiency
 
+## Claim-Flow
+- `c1` heart_rate, keyboard_activity -> derived_feature -> psychological -> High stress detected -> C4 -> user_notification, manager_report, weekly_team_summary -> user, manager, employer, evaluator
+- `c2` keyboard_activity -> derived_feature -> productivity -> Reduced work efficiency -> C5 -> user_notification, manager_report, weekly_team_summary -> user, manager, employer, evaluator
+
 ## Boundary Analysis
 - Data boundary: `cloud`
 - Authority boundary: `evaluator_visible`
