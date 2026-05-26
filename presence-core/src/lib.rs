@@ -162,6 +162,36 @@ pub extern "C" fn presence_score_severity(severity: u8) -> i32 {
     }
 }
 
+/// WASM-friendly scalar API.
+///
+/// Return encoding:
+/// - bits 0..7: decision
+/// - bits 8..15: allowed
+/// - bits 16..23: reason code
+/// - bits 24..31: suggested severity
+#[no_mangle]
+pub extern "C" fn presence_request_claim_code(
+    severity: u8,
+    audience: u8,
+    retention: u8,
+    claim_type: u8,
+    uses_health_signal: u8,
+    actionability: u8,
+) -> u32 {
+    let decision = presence_request_claim_core(PresenceClaimRequest {
+        severity,
+        audience,
+        retention,
+        claim_type,
+        uses_health_signal,
+        actionability,
+    });
+    u32::from(decision.decision)
+        | (u32::from(decision.allowed) << 8)
+        | (u32::from(decision.reason_code) << 16)
+        | (u32::from(decision.suggested_severity) << 24)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -212,5 +242,21 @@ mod tests {
         let decision = presence_request_claim_core(request);
         assert_eq!(decision.decision, PRESENCE_DECISION_DENY);
         assert_eq!(decision.reason_code, PRESENCE_REASON_AUTHORITY_BOUNDARY);
+    }
+
+    #[test]
+    fn wasm_code_api_encodes_decision() {
+        let code = presence_request_claim_code(
+            PRESENCE_C2_PATTERN_CUE,
+            PRESENCE_AUDIENCE_SELF,
+            PRESENCE_RETENTION_SESSION,
+            PRESENCE_CLAIM_PATTERN,
+            0,
+            PRESENCE_ACTIONABILITY_SELF_REFLECTION,
+        );
+        assert_eq!(code & 0xff, u32::from(PRESENCE_DECISION_ALLOW));
+        assert_eq!((code >> 8) & 0xff, 1);
+        assert_eq!((code >> 16) & 0xff, u32::from(PRESENCE_REASON_ALLOWED));
+        assert_eq!((code >> 24) & 0xff, u32::from(PRESENCE_C2_PATTERN_CUE));
     }
 }
