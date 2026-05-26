@@ -13,7 +13,7 @@ Report:
 - Public-information reference benchmark results.
 - Third-party quickstart result.
 - Demo HTTP/screenshot smoke-test result.
-- WASM build, TypeScript typecheck, Rust tests, C embedded demo, and minimal logging checks.
+- WASM build, TypeScript typecheck, Rust tests, C embedded demo, asymmetric policy signing, and minimal logging checks.
 
 ### Benchmark Profiles
 
@@ -34,20 +34,20 @@ Paper 1B, not Paper 1A, will report manipulation checks, reliability, mixed mode
 
 ## 日本語
 
-### Tool Evaluation
+### ツール評価
 
 次を報告する。
 
-- P1-P12 misuse-case detection結果。
+- P1からP12までのmisuse-case detection結果。
 - Policy mutation test結果。
 - Runtime Guard fixture decision。
 - app/SDKとpositive bypass fixtureに対するstatic scanner結果。
 - Public-information reference benchmark結果。
 - Third-party quickstart結果。
 - Demo HTTP/screenshot smoke-test結果。
-- WASM build、TypeScript typecheck、Rust test、C embedded demo、minimal logging check。
+- WASM build、TypeScript typecheck、Rust test、C embedded demo、asymmetric policy signing、minimal logging check。
 
-### Benchmark Profiles
+### ベンチマークprofile
 
 6つのprofileを報告する。
 
@@ -60,39 +60,6 @@ Paper 1B, not Paper 1A, will report manipulation checks, reliability, mixed mode
 
 これらのprofileは公開機能説明から抽象化したものであり、特定vendorに対するrisk claimではないと明記する。
 
-### Human Validation Path
+### 人あり検証への接続
 
 MFS、LIS、SOUS、WU、WDのmanipulation check、reliability、mixed model、non-inferiorityはPaper 1AではなくPaper 1Bで報告する。
-
-## 日本語
-
-### 操作チェック
-
-次を報告する。
-
-- クラウド処理の知覚で Cloud > Local となったか。
-- 第三者可視性の知覚で Manager-visible > Self-only となったか。
-- 断定性の知覚で Assertive > Non-assertive となったか。
-- 本人のみ保持の知覚で Self-only > Manager-visible となったか。
-
-### 信頼性
-
-MFS、LIS、SOUS、WU、WDについて、alpha と omega/近似omega を報告する。
-
-### 主効果と交互作用
-
-次について混合モデルの結果を報告する。
-
-- MFS。
-- LIS。
-- SOUS。
-- WU。
-- WD。
-
-### 非劣性
-
-暫定マージン0.5のもとで、C8がC7およびC1に対してSOUSで非劣性かを報告する。
-
-### ESS
-
-ESSは参加者評価アウトカムではなく、設計監査の文脈として報告する。

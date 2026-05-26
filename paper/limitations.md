@@ -12,19 +12,10 @@
 
 ## 日本語
 
-- public reference benchmarkは、公開機能説明から作ったものであり、ログイン後画面、private document、API probing、vulnerability testingに基づくものではない。
-- benchmark profileは抽象化である。名前の挙がったvendorが危険、非準拠、監視的であるという主張として読んではいけない。
+- Public reference benchmarkは、公開機能説明から作ったものであり、ログイン後画面、private document、API probing、vulnerability testingに基づくものではない。
+- Benchmark profileは抽象化である。名前の挙がったvendorが危険、非準拠、監視的であるという主張として読んではいけない。
 - PRESENCE Guardはclaim outputとclaim-flow policyを制御する。実際のpresenteeism検出、stress/mental health診断、生産性評価は行わない。
 - 現在のasymmetric signature実装は研究prototypeである。本番運用では、監査済みcryptographic library、managed key、key rotation、provenance、secure update frameworkを使うべきである。
 - WASM packageはlow-level scalar APIを公開する。高水準language bindingは本番利用前に監査が必要である。
-- static scanningは動的生成claimを見逃す可能性があり、benchmark demo内の意図的な危険文字列を検出する。CIではapplication/SDK codeをscan対象にし、benchmark corpusは分けるべきである。
+- Static scanningは動的生成claimを見逃す可能性があり、benchmark demo内の意図的な危険文字列を検出する。CIではapplication/SDK codeをscan対象にし、benchmark corpusは分けるべきである。
 - Paper 1Aはtoolとbenchmarkの評価である。人間の知覚・usability validationはPaper 1Bで扱う。
-
-## 日本語
-
-- 本研究はシナリオベースである。
-- 実際のプレゼンティーズムを測定しない。
-- ストレス、メンタルヘルス、生産性の検出器を検証しない。
-- 評価するのは、知覚された監視感、ラベル押し付け感、自己観察支援効果、利用意思、開示意思である。
-- 将来的にオンライン調査基盤を使う場合は、評価対象のシナリオ上システムと区別しなければならない。
-- SOUSの非劣性マージンは暫定的であり、投稿前に正当化または修正する必要がある。
