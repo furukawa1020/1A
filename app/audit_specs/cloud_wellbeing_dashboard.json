@@ -1,0 +1,47 @@
+{
+  "system_name": "cloud_wellbeing_dashboard",
+  "system_name_ja": "クラウド型ウェルビーイングダッシュボード",
+  "use_case": "Support employee well-being through a manager-visible dashboard.",
+  "use_case_ja": "管理者可視のダッシュボードで従業員のウェルビーイングを支援する。",
+  "context": {
+    "domain": "workplace",
+    "presenteeism_specificity": ["still_present_while_unwell", "disclosure_cost", "evaluation_relationship"],
+    "mandatory_use": true
+  },
+  "data": {
+    "signals": ["keyboard_activity", "application_usage", "heart_rate", "self_report"],
+    "processing": "cloud",
+    "retention": "long_term",
+    "raw_data_deleted": false
+  },
+  "visibility": {
+    "user": true,
+    "researcher": false,
+    "supporter": false,
+    "manager": true,
+    "teacher": false,
+    "employer": true,
+    "evaluator": true
+  },
+  "claims": [
+    {
+      "type": "psychological",
+      "label": "high stress",
+      "severity": "C4"
+    },
+    {
+      "type": "productivity",
+      "label": "reduced efficiency",
+      "severity": "C5"
+    }
+  ],
+  "actions": ["manager_report", "recommended_break", "weekly_summary", "team_benchmark"],
+  "controls": {
+    "local_processing": false,
+    "user_only": false,
+    "non_assertive": false,
+    "opt_out": "partial",
+    "deletion": "limited"
+  }
+}
+

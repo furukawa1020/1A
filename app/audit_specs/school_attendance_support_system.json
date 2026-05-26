@@ -1,0 +1,42 @@
+{
+  "system_name": "school_attendance_support_system",
+  "system_name_ja": "学校出席支援システム",
+  "use_case": "Support students by combining attendance, self-report, and condition flags visible to teachers.",
+  "use_case_ja": "出席、自己申告、状態フラグを組み合わせて教員に可視化し学生支援に用いる。",
+  "context": {
+    "domain": "school",
+    "presenteeism_specificity": ["still_present_while_unwell", "teacher_evaluation_relationship", "disclosure_cost"],
+    "mandatory_use": true
+  },
+  "data": {
+    "signals": ["attendance", "self_report", "learning_management_activity"],
+    "processing": "cloud",
+    "retention": "long_term",
+    "raw_data_deleted": false
+  },
+  "visibility": {
+    "user": true,
+    "researcher": false,
+    "supporter": true,
+    "manager": false,
+    "teacher": true,
+    "employer": false,
+    "evaluator": true
+  },
+  "claims": [
+    {
+      "type": "administrative",
+      "label": "attention needed",
+      "severity": "C6"
+    }
+  ],
+  "actions": ["teacher_flag", "attendance_follow_up", "weekly_summary"],
+  "controls": {
+    "local_processing": false,
+    "user_only": false,
+    "non_assertive": false,
+    "opt_out": "none",
+    "deletion": "limited"
+  }
+}
+

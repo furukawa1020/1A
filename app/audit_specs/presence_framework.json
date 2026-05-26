@@ -1,0 +1,311 @@
+{
+  "framework": "PRESENCE",
+  "version": "0.1.0",
+  "title": "PRESENCE: Claim-Flow Threat Modeling for Surveillance Transmutation in Presenteeism Support Systems",
+  "title_ja": "PRESENCE: プレゼンティーズム支援システムにおける監視化リスクのためのClaim-Flow脅威モデリング",
+  "central_claim_en": "In presenteeism support, claims generated from behavioral or health-related signals can become security/privacy assets when they cross authority boundaries and affect evaluation, disclosure, or self-interpretation.",
+  "central_claim_ja": "プレゼンティーズム支援では、行動・健康関連信号から生成される状態claimがauthority boundaryを越え、評価・開示・自己解釈に影響するとき、セキュリティ/プライバシー上の資産となる。",
+  "claim_flow": [
+    "signal",
+    "feature",
+    "state_estimate",
+    "label",
+    "claim",
+    "recommendation",
+    "administrative_action"
+  ],
+  "claim_severity_ladder": [
+    {
+      "level": "C0",
+      "name": "No claim",
+      "name_ja": "主張なし",
+      "example": "No state output",
+      "example_ja": "状態出力なし",
+      "risk": "low",
+      "score": 0
+    },
+    {
+      "level": "C1",
+      "name": "Sensor-level cue",
+      "name_ja": "センサーレベル手がかり",
+      "example": "Input interval changed",
+      "example_ja": "入力間隔が変化",
+      "risk": "low",
+      "score": 1
+    },
+    {
+      "level": "C2",
+      "name": "Pattern-level cue",
+      "name_ja": "パターンレベル手がかり",
+      "example": "The work flow may have changed",
+      "example_ja": "作業の流れに変化があるかもしれません",
+      "risk": "low_to_medium",
+      "score": 2
+    },
+    {
+      "level": "C3",
+      "name": "Behavioral claim",
+      "name_ja": "行動状態claim",
+      "example": "Focus has decreased",
+      "example_ja": "集中力が低下しています",
+      "risk": "medium",
+      "score": 3
+    },
+    {
+      "level": "C4",
+      "name": "Psychological claim",
+      "name_ja": "心理状態claim",
+      "example": "High stress state",
+      "example_ja": "高ストレス状態です",
+      "risk": "high",
+      "score": 4
+    },
+    {
+      "level": "C5",
+      "name": "Productivity claim",
+      "name_ja": "生産性claim",
+      "example": "Work efficiency has decreased",
+      "example_ja": "作業効率が低下しています",
+      "risk": "high",
+      "score": 5
+    },
+    {
+      "level": "C6",
+      "name": "Administrative claim",
+      "name_ja": "管理・査定claim",
+      "example": "Manager action is required",
+      "example_ja": "管理者対応が必要です",
+      "risk": "critical",
+      "score": 6
+    }
+  ],
+  "authority_boundaries": [
+    {
+      "level": "A0",
+      "name": "No observer",
+      "name_ja": "観察主体なし"
+    },
+    {
+      "level": "A1",
+      "name": "Self-only",
+      "name_ja": "本人のみ"
+    },
+    {
+      "level": "A2",
+      "name": "Researcher or supporter",
+      "name_ja": "研究者・支援者"
+    },
+    {
+      "level": "A3",
+      "name": "Teacher or manager-visible",
+      "name_ja": "教員・管理者可視"
+    },
+    {
+      "level": "A4",
+      "name": "Employer or evaluator-visible",
+      "name_ja": "雇用者・評価者可視"
+    },
+    {
+      "level": "A5",
+      "name": "Administrative action boundary",
+      "name_ja": "評価・査定・管理行動への接続"
+    }
+  ],
+  "interpretation_boundaries": [
+    {
+      "level": "I0",
+      "name": "No interpretation",
+      "name_ja": "意味づけなし"
+    },
+    {
+      "level": "I1",
+      "name": "Change cue",
+      "name_ja": "変化の手がかり"
+    },
+    {
+      "level": "I2",
+      "name": "Pattern cue",
+      "name_ja": "パターン手がかり"
+    },
+    {
+      "level": "I3",
+      "name": "Behavioral interpretation",
+      "name_ja": "行動の意味づけ"
+    },
+    {
+      "level": "I4",
+      "name": "Psychological interpretation",
+      "name_ja": "心理状態の意味づけ"
+    },
+    {
+      "level": "I5",
+      "name": "Productivity or administrative interpretation",
+      "name_ja": "生産性・管理上の意味づけ"
+    }
+  ],
+  "audit_axes": [
+    {
+      "key": "processing_location",
+      "letter": "P",
+      "question": "Where is the data processed?",
+      "question_ja": "データはどこで処理されるか。"
+    },
+    {
+      "key": "retention",
+      "letter": "R",
+      "question": "Is the state temporary or persistently stored?",
+      "question_ja": "状態は一時処理か、永続的に保存されるか。"
+    },
+    {
+      "key": "exposure_to_authority",
+      "letter": "E",
+      "question": "Can an authority see the claim?",
+      "question_ja": "authorityがclaimを見られるか。"
+    },
+    {
+      "key": "secondary_use",
+      "letter": "S",
+      "question": "Can the claim be reused for assessment, grades, employment, insurance, or management?",
+      "question_ja": "claimが評価・成績・雇用・保険・管理に再利用されうるか。"
+    },
+    {
+      "key": "evidence_strength",
+      "letter": "E",
+      "question": "How strong is the evidence behind the claim?",
+      "question_ja": "claimの根拠はどれくらい強いか。"
+    },
+    {
+      "key": "normative_actionability",
+      "letter": "N",
+      "question": "Does the output approach an instruction or required action?",
+      "question_ja": "出力は命令・対応要求に近いか。"
+    },
+    {
+      "key": "claim_severity",
+      "letter": "C",
+      "question": "How strong is the claim about the person?",
+      "question_ja": "本人についてのclaimはどれくらい強いか。"
+    },
+    {
+      "key": "exit_possibility",
+      "letter": "E",
+      "question": "Can the user refuse, stop, delete, or leave?",
+      "question_ja": "ユーザーは拒否・停止・削除・離脱できるか。"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "P1",
+      "name": "Support-to-Assessment",
+      "name_ja": "本人支援から評価・査定への転化",
+      "description": "Self-support results are reused for evaluation or assessment.",
+      "description_ja": "本人支援の結果が評価・査定に流用される。"
+    },
+    {
+      "id": "P2",
+      "name": "Self-Observation-to-Self-Surveillance",
+      "name_ja": "自己観察から自己監視への転化",
+      "description": "Self-observation becomes self-surveillance, rumination, or anxiety amplification.",
+      "description_ja": "自己観察が自己監視・反芻・不安増幅になる。"
+    },
+    {
+      "id": "P3",
+      "name": "Cue-to-Claim Escalation",
+      "name_ja": "手がかりから断定claimへの上昇",
+      "description": "A weak cue becomes an assertive state claim.",
+      "description_ja": "弱い手がかりが断定的な状態claimへ進む。"
+    },
+    {
+      "id": "P4",
+      "name": "Local Insight-to-Organizational Visibility",
+      "name_ja": "ローカル洞察から組織可視化への転化",
+      "description": "Local self-observation is connected to an organizational dashboard or report.",
+      "description_ja": "端末内の自己観察結果が組織ダッシュボードやレポートに接続される。"
+    },
+    {
+      "id": "P5",
+      "name": "Temporary State-to-Persistent Record",
+      "name_ja": "一時状態から長期記録への転化",
+      "description": "A temporary state becomes a persistent record.",
+      "description_ja": "一時的な状態変化が長期記録として残る。"
+    },
+    {
+      "id": "P6",
+      "name": "Health Signal-to-Productivity Label",
+      "name_ja": "健康信号から生産性ラベルへの転化",
+      "description": "Health or unwellness signals are converted into productivity labels.",
+      "description_ja": "健康・不調に関する信号が生産性ラベルへ変換される。"
+    },
+    {
+      "id": "P7",
+      "name": "Care-to-Compliance",
+      "name_ja": "ケアから遵守管理への転化",
+      "description": "Support becomes compliance management for rest, attendance, or work behavior.",
+      "description_ja": "本人支援が休憩・出席・勤務態度の遵守管理へ変わる。"
+    },
+    {
+      "id": "P8",
+      "name": "Voluntary Reflection-to-Mandatory Monitoring",
+      "name_ja": "任意の振り返りから義務的監視への転化",
+      "description": "Voluntary reflection becomes practically mandatory monitoring.",
+      "description_ja": "任意の自己観察が実質的な義務利用になる。"
+    },
+    {
+      "id": "P9",
+      "name": "Context Collapse",
+      "name_ja": "文脈崩壊",
+      "description": "A user's own context is collapsed into a narrow system label.",
+      "description_ja": "本人の文脈が狭いシステムラベルへ潰される。"
+    },
+    {
+      "id": "P10",
+      "name": "Ambiguous State-to-Actionable Flag",
+      "name_ja": "曖昧状態から対応フラグへの転化",
+      "description": "Ambiguous change becomes an actionable warning flag.",
+      "description_ja": "曖昧な状態変化が要対応・要注意フラグになる。"
+    },
+    {
+      "id": "P11",
+      "name": "Individual Support-to-Group Benchmarking",
+      "name_ja": "個人支援から集団ベンチマークへの転化",
+      "description": "Self-support data becomes team, class, or department comparison data.",
+      "description_ja": "本人支援データがチーム・学級・部署内比較に使われる。"
+    },
+    {
+      "id": "P12",
+      "name": "Non-Diagnostic Tool-to-Quasi-Diagnosis",
+      "name_ja": "非診断ツールから疑似診断への転化",
+      "description": "A non-diagnostic tool is treated as a practical judgment about mental state.",
+      "description_ja": "診断ではないツールが実質的なメンタル状態判断として扱われる。"
+    }
+  ],
+  "mitigations": {
+    "P1": ["remove authority visibility", "separate support records from assessment systems"],
+    "P2": ["cap feedback frequency", "avoid comparative scoring", "provide user-controlled reflection"],
+    "P3": ["cap claim severity at C2", "show uncertainty and context limits"],
+    "P4": ["keep insights local", "disable organizational dashboards"],
+    "P5": ["use short retention", "delete raw data by default"],
+    "P6": ["ban productivity claims from health-related signals"],
+    "P7": ["separate care suggestions from compliance workflows"],
+    "P8": ["provide full opt-out and non-use equivalence"],
+    "P9": ["preserve user interpretation space", "avoid single-state labels"],
+    "P10": ["avoid actionable flags unless evidence and consent are strong"],
+    "P11": ["avoid group benchmarking for self-support data"],
+    "P12": ["ban medical and psychological labels unless clinically validated and ethically governed"]
+  },
+  "mitigations_ja": {
+    "P1": ["authority可視性を削除する", "支援記録を評価・査定システムから分離する"],
+    "P2": ["フィードバック頻度を制限する", "比較スコアを避ける", "ユーザー制御の振り返りにする"],
+    "P3": ["claim severityをC2以下に制限する", "不確実性と文脈限界を表示する"],
+    "P4": ["洞察をローカルに留める", "組織ダッシュボードを無効化する"],
+    "P5": ["短期保持にする", "生データをデフォルト削除する"],
+    "P6": ["健康関連信号から生産性claimを生成しない"],
+    "P7": ["ケア提案を遵守管理ワークフローから分離する"],
+    "P8": ["完全なopt-outと不利用時の不利益なしを保証する"],
+    "P9": ["ユーザーの解釈余地を残す", "単一状態ラベルを避ける"],
+    "P10": ["証拠と同意が強くない限り対応フラグ化しない"],
+    "P11": ["本人支援データを集団ベンチマークに使わない"],
+    "P12": ["臨床的妥当性と倫理的統制がない限り医療・心理ラベルを禁止する"]
+  }
+}
+

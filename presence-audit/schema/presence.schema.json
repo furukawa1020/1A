@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/presence.schema.json",
+  "title": "PRESENCE Audit Spec",
+  "title_ja": "PRESENCE監査仕様",
+  "type": "object",
+  "required": ["system", "data", "visibility", "claims", "actions", "controls"],
+  "properties": {
+    "system": {
+      "type": "object",
+      "required": ["name", "domain", "intended_use"],
+      "properties": {
+        "name": { "type": "string" },
+        "domain": { "type": "string" },
+        "intended_use": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "presenteeism_context": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "mandatory_use": { "type": "boolean" }
+      }
+    },
+    "data": {
+      "type": "object",
+      "required": ["signals", "processing", "retention", "identifiability"],
+      "properties": {
+        "signals": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "processing": {
+          "type": "string",
+          "enum": ["local", "edge", "limited_server", "cloud"]
+        },
+        "retention": {
+          "type": "string",
+          "enum": ["none", "session", "short_term", "long_term"]
+        },
+        "identifiability": {
+          "type": "string",
+          "enum": ["anonymous", "pseudonymous", "organizational_id", "real_name"]
+        },
+        "raw_data_deleted": { "type": "boolean" }
+      }
+    },
+    "visibility": {
+      "type": "object",
+      "properties": {
+        "user": { "type": "boolean" },
+        "manager": { "type": "boolean" },
+        "teacher": { "type": "boolean" },
+        "employer": { "type": "boolean" },
+        "researcher": { "type": "boolean" },
+        "supporter": { "type": "boolean" },
+        "evaluator": { "type": "boolean" }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "text", "type", "severity"],
+        "properties": {
+          "id": { "type": "string" },
+          "text": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["none", "sensor", "pattern", "behavioral", "psychological", "productivity", "administrative", "group_benchmark"]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["C0", "C1", "C2", "C3", "C4", "C5", "C6"]
+          },
+          "source": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "controls": {
+      "type": "object",
+      "required": ["local_processing", "raw_data_deleted", "user_only", "non_assertive_output", "opt_out"],
+      "properties": {
+        "local_processing": { "type": "boolean" },
+        "raw_data_deleted": { "type": "boolean" },
+        "user_only": { "type": "boolean" },
+        "non_assertive_output": { "type": "boolean" },
+        "opt_out": {
+          "type": "string",
+          "enum": ["none", "partial", "full"]
+        },
+        "deletion": {
+          "type": "string",
+          "enum": ["none", "limited", "full"]
+        }
+      }
+    }
+  }
+}
+

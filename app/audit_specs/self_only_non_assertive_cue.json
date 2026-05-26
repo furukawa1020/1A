@@ -1,0 +1,42 @@
+{
+  "system_name": "self_only_non_assertive_cue",
+  "system_name_ja": "本人のみ非断定手がかりシステム",
+  "use_case": "Offer local, self-only cues for self-observation without asserting a state label.",
+  "use_case_ja": "状態ラベルを断定せず、ローカルかつ本人のみの自己観察手がかりを提示する。",
+  "context": {
+    "domain": "workplace_or_school",
+    "presenteeism_specificity": ["still_present_while_unwell", "disclosure_cost", "self_interpretation_space"],
+    "mandatory_use": false
+  },
+  "data": {
+    "signals": ["interaction_timing"],
+    "processing": "local",
+    "retention": "none",
+    "raw_data_deleted": true
+  },
+  "visibility": {
+    "user": true,
+    "researcher": false,
+    "supporter": false,
+    "manager": false,
+    "teacher": false,
+    "employer": false,
+    "evaluator": false
+  },
+  "claims": [
+    {
+      "type": "pattern_cue",
+      "label": "work flow may have changed",
+      "severity": "C2"
+    }
+  ],
+  "actions": ["self_reflection_prompt"],
+  "controls": {
+    "local_processing": true,
+    "user_only": true,
+    "non_assertive": true,
+    "opt_out": "full",
+    "deletion": "full"
+  }
+}
+

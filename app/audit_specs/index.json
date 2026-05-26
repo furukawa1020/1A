@@ -1,0 +1,11 @@
+{
+  "framework": "PRESENCE",
+  "case_files": [
+    "cloud_wellbeing_dashboard.json",
+    "local_stress_label_app.json",
+    "self_only_non_assertive_cue.json",
+    "school_attendance_support_system.json",
+    "team_health_analytics.json"
+  ]
+}
+

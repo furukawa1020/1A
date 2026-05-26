@@ -1,0 +1,42 @@
+{
+  "system_name": "team_health_analytics",
+  "system_name_ja": "チーム健康分析システム",
+  "use_case": "Aggregate individual support data into team-level well-being analytics.",
+  "use_case_ja": "個人支援データをチーム単位のウェルビーイング分析に集約する。",
+  "context": {
+    "domain": "workplace",
+    "presenteeism_specificity": ["still_present_while_unwell", "group_benchmarking_risk"],
+    "mandatory_use": false
+  },
+  "data": {
+    "signals": ["self_report", "application_usage", "calendar_load"],
+    "processing": "cloud",
+    "retention": "long_term",
+    "raw_data_deleted": false
+  },
+  "visibility": {
+    "user": true,
+    "researcher": false,
+    "supporter": true,
+    "manager": true,
+    "teacher": false,
+    "employer": true,
+    "evaluator": false
+  },
+  "claims": [
+    {
+      "type": "group_benchmark",
+      "label": "team stress above baseline",
+      "severity": "C4"
+    }
+  ],
+  "actions": ["team_benchmark", "manager_report", "weekly_summary"],
+  "controls": {
+    "local_processing": false,
+    "user_only": false,
+    "non_assertive": false,
+    "opt_out": "partial",
+    "deletion": "limited"
+  }
+}
+

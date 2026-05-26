@@ -1,0 +1,42 @@
+{
+  "system_name": "local_stress_label_app",
+  "system_name_ja": "ローカル型ストレスラベルアプリ",
+  "use_case": "Give the user a local state label based on work interaction patterns.",
+  "use_case_ja": "作業インタラクションのパターンから本人にローカルな状態ラベルを提示する。",
+  "context": {
+    "domain": "workplace_or_school",
+    "presenteeism_specificity": ["still_present_while_unwell", "self_interpretation_risk"],
+    "mandatory_use": false
+  },
+  "data": {
+    "signals": ["keyboard_activity", "mouse_activity"],
+    "processing": "local",
+    "retention": "session",
+    "raw_data_deleted": true
+  },
+  "visibility": {
+    "user": true,
+    "researcher": false,
+    "supporter": false,
+    "manager": false,
+    "teacher": false,
+    "employer": false,
+    "evaluator": false
+  },
+  "claims": [
+    {
+      "type": "psychological",
+      "label": "high stress tendency",
+      "severity": "C4"
+    }
+  ],
+  "actions": ["recommended_break"],
+  "controls": {
+    "local_processing": true,
+    "user_only": true,
+    "non_assertive": false,
+    "opt_out": "full",
+    "deletion": "full"
+  }
+}
+
