@@ -358,6 +358,8 @@ def compute_boundaries(spec):
         violations.append("system claim narrows or overrides user interpretation")
     if data.get("retention") == "long_term":
         violations.append("temporary state can become persistent record")
+    if actions & {"csv_export", "excel_export", "raw_export", "claim_export"} and max_claim >= 4:
+        violations.append("high-severity claim records can be exported outside the guard context")
 
     return {
         "data_boundary": data_boundary,
@@ -426,6 +428,9 @@ def analyze(spec):
         mitigations.append("make output self-only")
     if spec.get("data", {}).get("retention") == "long_term":
         mitigations.append("disable long-term retention")
+    if any(action in spec.get("actions", []) for action in ["csv_export", "excel_export", "raw_export", "claim_export"]):
+        mitigations.append("disable raw export for claim-level records")
+        mitigations.append("aggregate organizational analytics above a k-anonymity threshold")
     return {
         "system_name": spec.get("system", {}).get("name", "unknown"),
         "presence_score": score,

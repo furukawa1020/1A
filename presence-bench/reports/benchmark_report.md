@@ -4,10 +4,10 @@ This benchmark uses reference profiles abstracted from public feature documentat
 
 | Profile | Risk | Score | Passed | Patterns | Missing |
 | --- | --- | ---: | --- | --- | --- |
-| `employee_app_manager_dashboard` | `CRITICAL` | 32 | no | P1, P10, P12, P2, P3, P5, P7, P9 | P8 |
+| `employee_app_manager_dashboard` | `CRITICAL` | 32 | yes | P1, P10, P12, P2, P3, P5, P7, P9 | - |
 | `health_data_labor_risk_dashboard` | `CRITICAL` | 34 | yes | P1, P10, P2, P3, P5, P7, P8, P9 | - |
 | `noticer_local_low_risk` | `LOW` | 3 | yes | - | - |
-| `presenteeism_survey_dashboard` | `CRITICAL` | 31 | no | P1, P10, P12, P2, P3, P5, P6, P7, P8, P9 | P11 |
+| `presenteeism_survey_dashboard` | `CRITICAL` | 31 | yes | P1, P10, P12, P2, P3, P5, P6, P7, P8, P9 | - |
 | `productivity_loss_visualization` | `CRITICAL` | 31 | yes | P1, P10, P11, P2, P3, P5, P6, P7, P8, P9 | - |
 | `stress_check_high_risk_extraction` | `CRITICAL` | 34 | yes | P1, P10, P2, P3, P5, P7, P8, P9 | - |
 

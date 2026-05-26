@@ -8,6 +8,7 @@ negative tests, and lightweight overhead measurement.
 
 import argparse
 import copy
+import importlib.util
 import json
 import random
 import re
@@ -295,6 +296,21 @@ def evaluate_overhead(iterations):
     }
 
 
+def evaluate_public_reference_benchmark():
+    module_path = ROOT / "presence-bench" / "run_benchmark.py"
+    spec = importlib.util.spec_from_file_location("presence_bench_runner", module_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    rows = []
+    for profile_path in sorted((ROOT / "presence-bench" / "profiles").glob("*.yaml")):
+        rows.append(module.evaluate_profile(profile_path))
+    return {
+        "passed": all(row["passed"] for row in rows),
+        "profile_count": len(rows),
+        "rows": rows,
+    }
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default=str(ROOT / "analysis" / "outputs" / "presence_evaluation.json"))
@@ -311,6 +327,7 @@ def main(argv=None):
         "fuzz_negative_tests": evaluate_fuzz(),
         "no_network_core": evaluate_no_network_core(),
         "dependency_surface": evaluate_dependency_surface(),
+        "public_reference_benchmark": evaluate_public_reference_benchmark(),
         "overhead": evaluate_overhead(args.iterations),
     }
     results["passed"] = all(item.get("passed", False) for item in results.values() if isinstance(item, dict))

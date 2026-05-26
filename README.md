@@ -18,6 +18,8 @@ The central security and privacy question is not "How accurately can we infer a 
 - `presence-ffi-c/`: embedded-style C ABI sketch.
 - `presence-audit/`: schema, CLI, examples, sample reports, policy bundle commands, mutation tests, and CI/action integration.
 - `presence-security/`: threat model, security requirements, evaluation plan, and prototype SBOM.
+- `presence-bench/`: public-information reference profiles and benchmark reports.
+- `demos/`: abstract reproduction UIs for manager dashboard, employee app, and Noticer Local patterns.
 - `templates/`: third-party integration and migration templates.
 - `docs/`: positioning, threat model, PRESENCE toolchain, factorial design, measures, ESS audit, ethics, and analysis plan.
 - `app/`: browser-based PSTT experiment interface and 2x2x2 condition file.
@@ -72,6 +74,12 @@ python presence-tests\benchmark_guard.py --output analysis\outputs\presence_over
 
 The evaluation covers P1-P12 misuse-case fixtures, policy mutation tests, runtime allow/rewrite/deny decisions, signed policy tamper rejection, invalid input rejection, bypass checks, fuzz negative tests, no-network core scanning, dependency-surface checks, and overhead measurements.
 
+Run the public-information benchmark:
+
+```powershell
+python presence-bench\run_benchmark.py --output presence-bench\reports\benchmark_report.md
+```
+
 ### Five-Minute Third-Party Quickstart
 
 ```powershell
@@ -95,6 +103,22 @@ The migration template shows the practical mitigation path from a C4 psychologic
 ```
 
 This combines design audit, static dangerous-claim scanning, and CI failure on high-risk claim-flow.
+
+### Benchmark Demos
+
+```powershell
+python -m http.server 8020 --bind 127.0.0.1
+```
+
+Open:
+
+```text
+http://127.0.0.1:8020/demos/risk_dashboard_demo/
+http://127.0.0.1:8020/demos/employee_app_demo/
+http://127.0.0.1:8020/demos/noticer_local_guarded_demo/
+```
+
+The demos are abstract reproductions of feature patterns, not copies or assessments of real services.
 
 ## 日本語クイックスタート
 
@@ -121,6 +145,14 @@ CI gateは次のように使う。
 ```
 
 これにより、設計監査、危険claim文字列のstatic scan、高リスクclaim-flowでのCI失敗を組み合わせる。
+
+公開情報ベースのbenchmarkは次で実行する。
+
+```powershell
+python presence-bench\run_benchmark.py --output presence-bench\reports\benchmark_report.md
+```
+
+demo UIは、実在サービスのcopyや評価ではなく、公開機能パターンを抽象化した再現UIである。
 
 Paper 1Aの人なし評価を実行するには次を使う。
 

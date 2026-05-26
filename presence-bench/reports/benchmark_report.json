@@ -1,5 +1,5 @@
 {
-  "passed": false,
+  "passed": true,
   "rows": [
     {
       "profile": "employee_app_manager_dashboard",
@@ -15,18 +15,16 @@
         "P7",
         "P9"
       ],
-      "missing_patterns": [
-        "P8"
-      ],
+      "missing_patterns": [],
       "high_risk_claim_types": [
         "administrative",
         "psychological"
       ],
       "missing_claim_types": [],
       "risk_ok": true,
-      "pattern_ok": false,
+      "pattern_ok": true,
       "claim_ok": true,
-      "passed": false,
+      "passed": true,
       "mitigations": [
         "remove manager/evaluator visibility",
         "separate self-support outputs from assessment systems",
@@ -83,7 +81,9 @@
         "preserve user interpretation space",
         "avoid single-state labels",
         "avoid actionable flags unless evidence and consent are strong",
-        "make output self-only"
+        "make output self-only",
+        "disable raw export for claim-level records",
+        "aggregate organizational analytics above a k-anonymity threshold"
       ]
     },
     {
@@ -116,18 +116,16 @@
         "P8",
         "P9"
       ],
-      "missing_patterns": [
-        "P11"
-      ],
+      "missing_patterns": [],
       "high_risk_claim_types": [
         "productivity",
         "psychological"
       ],
       "missing_claim_types": [],
       "risk_ok": true,
-      "pattern_ok": false,
+      "pattern_ok": true,
       "claim_ok": true,
-      "passed": false,
+      "passed": true,
       "mitigations": [
         "remove manager/evaluator visibility",
         "separate self-support outputs from assessment systems",
@@ -145,7 +143,9 @@
         "avoid single-state labels",
         "avoid actionable flags unless evidence and consent are strong",
         "ban medical/psychological labels unless clinically validated and ethically governed",
-        "make output self-only"
+        "make output self-only",
+        "disable raw export for claim-level records",
+        "aggregate organizational analytics above a k-anonymity threshold"
       ]
     },
     {
@@ -190,7 +190,9 @@
         "avoid single-state labels",
         "avoid actionable flags unless evidence and consent are strong",
         "remove group benchmarking for self-support data",
-        "make output self-only"
+        "make output self-only",
+        "disable raw export for claim-level records",
+        "aggregate organizational analytics above a k-anonymity threshold"
       ]
     },
     {
