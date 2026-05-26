@@ -1,0 +1,39 @@
+{
+  "policy_version": "presence-guard-0.1.0",
+  "policy_name": "presence_default_claim_minimization",
+  "policy_name_ja": "PRESENCE標準claim最小化ポリシー",
+  "mode": "deny_by_default",
+  "max_allowed_severity": "C2",
+  "allowed_audiences": ["self"],
+  "allowed_retention": ["none", "session"],
+  "allowed_actionability": ["self_reflection", "none"],
+  "capabilities": {
+    "psychological_claims": false,
+    "productivity_claims": false,
+    "administrative_claims": false,
+    "authority_visibility": false,
+    "long_term_retention": false,
+    "secondary_use": false,
+    "diagnostic_labels": false
+  },
+  "invariants": {
+    "health_signal_must_not_become_productivity_claim": true,
+    "self_observation_claim_must_not_cross_authority_boundary": true,
+    "temporary_state_must_not_become_persistent_administrative_record": true,
+    "psychological_claim_requires_explicit_capability": true,
+    "non_diagnostic_system_must_not_produce_quasi_diagnostic_labels": true,
+    "user_must_retain_interpretation_authority": true
+  },
+  "claim_minimization": {
+    "default_rewrite_severity": "C2",
+    "default_suggested_text": "The work flow may have changed slightly. It may be worth briefly checking how you feel.",
+    "default_suggested_text_ja": "作業の流れに少し変化があるかもしれません。一度、自分の感じを見てもよさそうです。"
+  },
+  "security": {
+    "core_network": "disabled",
+    "dynamic_eval": "forbidden",
+    "unknown_claim": "deny_or_rewrite",
+    "audit_log_contains_user_state": false
+  }
+}
+

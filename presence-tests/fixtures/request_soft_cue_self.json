@@ -1,0 +1,11 @@
+{
+  "sourceSignals": ["keyboard_rhythm"],
+  "proposedText": "The work flow may have changed slightly",
+  "proposedSeverity": "C2",
+  "claimType": "pattern",
+  "audience": "self",
+  "retention": "session",
+  "actionability": "self_reflection",
+  "evidenceStrength": "limited"
+}
+

@@ -1,0 +1,11 @@
+{
+  "sourceSignals": ["heart_rate", "keyboard_activity"],
+  "proposedText": "High stress detected",
+  "proposedSeverity": "C4",
+  "claimType": "psychological",
+  "audience": "self",
+  "retention": "session",
+  "actionability": "self_reflection",
+  "evidenceStrength": "weak"
+}
+

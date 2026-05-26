@@ -1,0 +1,11 @@
+{
+  "sourceSignals": ["heart_rate", "keyboard_activity"],
+  "proposedText": "Reduced work efficiency",
+  "proposedSeverity": "C5",
+  "claimType": "productivity",
+  "audience": "manager",
+  "retention": "long_term",
+  "actionability": "manager_report",
+  "evidenceStrength": "weak"
+}
+

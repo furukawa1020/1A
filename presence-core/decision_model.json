@@ -1,0 +1,23 @@
+{
+  "request": {
+    "sourceSignals": ["keyboard_rhythm", "idle_time"],
+    "proposedText": "High stress detected",
+    "proposedSeverity": "C4",
+    "claimType": "psychological",
+    "audience": "self",
+    "retention": "session",
+    "actionability": "self_reflection",
+    "evidenceStrength": "weak"
+  },
+  "decision": {
+    "decision": "rewrite",
+    "allowed": false,
+    "reason": [
+      "psychological claim requires explicit capability",
+      "claim severity exceeds policy cap C2"
+    ],
+    "suggestedText": "The work flow may have changed slightly. It may be worth briefly checking how you feel.",
+    "suggestedSeverity": "C2"
+  }
+}
+

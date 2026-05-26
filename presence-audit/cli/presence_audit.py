@@ -5,6 +5,10 @@ PRESENCE監査CLI。
 """
 
 import argparse
+import base64
+import copy
+import hashlib
+import hmac
 import json
 import re
 import sys
@@ -20,6 +24,23 @@ CLAIM_SCORES = {
     "C5": 5,
     "C6": 6,
 }
+
+AUTHORITY_AUDIENCES = {"manager", "teacher", "employer", "evaluator", "admin", "organization"}
+HEALTH_SIGNALS = {"heart_rate", "sleep", "fatigue", "mood", "self_report", "health_status"}
+DIAGNOSTIC_TERMS = [
+    "stress",
+    "depression",
+    "anxiety",
+    "burnout",
+    "fatigue",
+    "高ストレス",
+    "うつ",
+    "不安",
+    "燃え尽き",
+    "疲労",
+    "危険状態",
+    "要対応",
+]
 
 PATTERN_NAMES = {
     "P1": "Support-to-Assessment",
@@ -161,6 +182,18 @@ def load_spec(path):
     except ImportError:
         return simple_yaml_load(text)
     return yaml.safe_load(text)
+
+
+def load_json(path):
+    with Path(path).open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def write_json(path, data):
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    with Path(path).open("w", encoding="utf-8") as handle:
+        json.dump(data, handle, ensure_ascii=False, indent=2)
+        handle.write("\n")
 
 
 def severity_score(claim):
@@ -498,6 +531,208 @@ def risk_order(level):
     return order[level.upper()]
 
 
+def normalize_policy(policy):
+    defaults = {
+        "mode": "deny_by_default",
+        "max_allowed_severity": "C2",
+        "allowed_audiences": ["self"],
+        "allowed_retention": ["none", "session"],
+        "allowed_actionability": ["self_reflection", "none"],
+        "capabilities": {},
+        "invariants": {},
+        "claim_minimization": {
+            "default_rewrite_severity": "C2",
+            "default_suggested_text": "The work flow may have changed slightly. It may be worth briefly checking how you feel.",
+            "default_suggested_text_ja": "作業の流れに少し変化があるかもしれません。一度、自分の感じを見てもよさそうです。",
+        },
+    }
+    merged = copy.deepcopy(defaults)
+    for key, value in policy.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key].update(value)
+        else:
+            merged[key] = value
+    return merged
+
+
+def has_health_signal(request):
+    return any(signal in HEALTH_SIGNALS for signal in request.get("sourceSignals", []))
+
+
+def authority_audience(audience):
+    if isinstance(audience, list):
+        return any(item in AUTHORITY_AUDIENCES for item in audience)
+    return audience in AUTHORITY_AUDIENCES
+
+
+def contains_diagnostic_term(text):
+    normalized = str(text or "").lower()
+    return any(term.lower() in normalized for term in DIAGNOSTIC_TERMS)
+
+
+def guard_decision(policy, request):
+    policy = normalize_policy(policy)
+    reasons = []
+    severity = request.get("proposedSeverity", "UNKNOWN")
+    severity_score_value = CLAIM_SCORES.get(severity)
+    max_score = CLAIM_SCORES.get(policy.get("max_allowed_severity", "C2"), 2)
+    claim_type = request.get("claimType") or request.get("type") or "unknown"
+    audience = request.get("audience", "unknown")
+    retention = request.get("retention", "unknown")
+    actionability = request.get("actionability", "unknown")
+    capabilities = policy.get("capabilities", {})
+    invariants = policy.get("invariants", {})
+    minimization = policy.get("claim_minimization", {})
+
+    def decision(kind, extra=None):
+        result = {
+            "decision": kind,
+            "allowed": kind == "allow",
+            "reason": reasons,
+            "suggestedText": minimization.get("default_suggested_text"),
+            "suggestedTextJa": minimization.get("default_suggested_text_ja"),
+            "suggestedSeverity": minimization.get("default_rewrite_severity", "C2"),
+        }
+        if extra:
+            result.update(extra)
+        return result
+
+    if severity_score_value is None:
+        reasons.append("unknown claim severity")
+        return decision("deny")
+
+    if audience not in policy.get("allowed_audiences", ["self"]):
+        reasons.append("audience is not allowed by policy")
+    if retention not in policy.get("allowed_retention", ["none", "session"]):
+        reasons.append("retention is not allowed by policy")
+    if actionability not in policy.get("allowed_actionability", ["self_reflection", "none"]):
+        reasons.append("actionability is not allowed by policy")
+    if severity_score_value > max_score:
+        reasons.append(f"claim severity exceeds policy cap {policy.get('max_allowed_severity', 'C2')}")
+
+    if invariants.get("health_signal_must_not_become_productivity_claim", True) and has_health_signal(request) and claim_type == "productivity":
+        reasons.append("health signal must not become productivity claim")
+        return decision("deny")
+    if invariants.get("self_observation_claim_must_not_cross_authority_boundary", True) and authority_audience(audience):
+        reasons.append("self-observation claim crosses authority boundary")
+        return decision("deny")
+    if (
+        invariants.get("temporary_state_must_not_become_persistent_administrative_record", True)
+        and retention == "long_term"
+        and claim_type in {"administrative", "productivity", "psychological"}
+    ):
+        reasons.append("temporary state must not become persistent administrative record")
+        return decision("deny")
+    if (
+        invariants.get("psychological_claim_requires_explicit_capability", True)
+        and claim_type == "psychological"
+        and not capabilities.get("psychological_claims", False)
+    ):
+        reasons.append("psychological claim requires explicit capability")
+    if claim_type == "productivity" and not capabilities.get("productivity_claims", False):
+        reasons.append("productivity claims are disabled")
+    if claim_type == "administrative" and not capabilities.get("administrative_claims", False):
+        reasons.append("administrative claims are disabled")
+    if (
+        invariants.get("non_diagnostic_system_must_not_produce_quasi_diagnostic_labels", True)
+        and contains_diagnostic_term(request.get("proposedText", ""))
+        and not capabilities.get("diagnostic_labels", False)
+    ):
+        reasons.append("non-diagnostic system must not produce quasi-diagnostic labels")
+    if invariants.get("user_must_retain_interpretation_authority", True) and severity_score_value > 2:
+        reasons.append("user must retain interpretation authority")
+
+    if not reasons:
+        return decision("allow", {"text": request.get("proposedText"), "severity": severity})
+    if audience == "self" and retention != "long_term":
+        return decision("rewrite")
+    return decision("deny")
+
+
+def canonical_json(data):
+    return json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+
+
+def sign_bundle(policy, secret):
+    payload = copy.deepcopy(policy)
+    payload.pop("signature", None)
+    digest = hmac.new(secret.encode("utf-8"), canonical_json(payload), hashlib.sha256).digest()
+    payload["signature"] = {
+        "algorithm": "HMAC-SHA256",
+        "value": base64.b64encode(digest).decode("ascii"),
+        "note": "Prototype signing for local research use; production should use asymmetric signatures."
+    }
+    return payload
+
+
+def verify_bundle(policy, secret):
+    signature = policy.get("signature", {})
+    expected = sign_bundle(policy, secret).get("signature", {}).get("value")
+    return bool(signature.get("value") and hmac.compare_digest(signature["value"], expected))
+
+
+def guard_command(args):
+    policy = load_json(args.policy)
+    if args.verify_secret and not verify_bundle(policy, args.verify_secret):
+        raise SystemExit("Policy signature verification failed")
+    request = load_json(args.request)
+    result = guard_decision(policy, request)
+    output = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
+    if args.output:
+        Path(args.output).write_text(output, encoding="utf-8")
+    else:
+        sys.stdout.write(output)
+    return 0
+
+
+def compile_policy_command(args):
+    policy = load_json(args.policy)
+    if args.sign_secret:
+        policy = sign_bundle(policy, args.sign_secret)
+    write_json(args.output, policy)
+    print(f"Wrote policy bundle to {args.output}")
+    return 0
+
+
+def verify_policy_command(args):
+    policy = load_json(args.policy)
+    ok = verify_bundle(policy, args.sign_secret)
+    print("Policy signature OK" if ok else "Policy signature FAILED")
+    return 0 if ok else 2
+
+
+def mutation_test_command(args):
+    spec = load_spec(args.config)
+    base = analyze(spec)
+    mutations = [
+        ("manager_visible", lambda s: s.setdefault("visibility", {}).__setitem__("manager", True)),
+        ("long_term_retention", lambda s: s.setdefault("data", {}).__setitem__("retention", "long_term")),
+        ("severity_to_C5", lambda s: s.setdefault("claims", [{}])[0].__setitem__("severity", "C5")),
+        ("audience_to_employer", lambda s: s.setdefault("visibility", {}).__setitem__("employer", True)),
+        ("productivity_label", lambda s: s.setdefault("claims", [{}])[0].update({"type": "productivity", "text": "Reduced work efficiency", "severity": "C5"})),
+    ]
+    rows = []
+    for name, apply_mutation in mutations:
+        mutated = copy.deepcopy(spec)
+        apply_mutation(mutated)
+        result = analyze(mutated)
+        rows.append(
+            {
+                "mutation": name,
+                "base_score": base["presence_score"],
+                "mutated_score": result["presence_score"],
+                "score_increased": result["presence_score"] > base["presence_score"],
+                "risk_level": result["risk_level"],
+            }
+        )
+    output = json.dumps(rows, ensure_ascii=False, indent=2) + "\n"
+    if args.output:
+        Path(args.output).write_text(output, encoding="utf-8")
+    else:
+        sys.stdout.write(output)
+    return 0 if all(row["score_increased"] for row in rows) else 2
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="presence-audit")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -508,6 +743,29 @@ def main(argv=None):
     audit.add_argument("--output")
     audit.add_argument("--fail-on", choices=["LOW", "MEDIUM", "HIGH", "CRITICAL"])
     audit.set_defaults(func=audit_command)
+
+    guard = subparsers.add_parser("guard", help="Enforce a single claim request against a PRESENCE policy.")
+    guard.add_argument("policy")
+    guard.add_argument("request")
+    guard.add_argument("--verify-secret")
+    guard.add_argument("--output")
+    guard.set_defaults(func=guard_command)
+
+    compile_policy = subparsers.add_parser("compile-policy", help="Compile/sign a PRESENCE Guard policy bundle.")
+    compile_policy.add_argument("policy")
+    compile_policy.add_argument("--output", required=True)
+    compile_policy.add_argument("--sign-secret")
+    compile_policy.set_defaults(func=compile_policy_command)
+
+    verify_policy = subparsers.add_parser("verify-policy", help="Verify a signed PRESENCE Guard policy bundle.")
+    verify_policy.add_argument("policy")
+    verify_policy.add_argument("--sign-secret", required=True)
+    verify_policy.set_defaults(func=verify_policy_command)
+
+    mutation_test = subparsers.add_parser("mutation-test", help="Run simple policy/design mutation tests.")
+    mutation_test.add_argument("config")
+    mutation_test.add_argument("--output")
+    mutation_test.set_defaults(func=mutation_test_command)
 
     args = parser.parse_args(argv)
     return args.func(args)
