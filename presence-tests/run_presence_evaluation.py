@@ -166,12 +166,40 @@ def evaluate_bypass_checks():
     direct_output_render = bool(re.search(r"renderOutput\([^)]*condition\.output_text", renderer + app_main))
     guard_called = "requestClaim" in app_main and "guard.requestClaim" in app_main
     unsafe_fixture_detected = bool(re.search(r"render\([\"'].*(stress|efficiency|concentration|productivity)", unsafe_fixture, re.I))
+    app_scan = pa.scan_paths([ROOT / "app" / "src"])
+    unsafe_scan = pa.scan_paths([ROOT / "presence-tests" / "fixtures" / "bypass_tests" / "direct_claim_render.js"])
     return {
-        "passed": (not direct_output_render) and guard_called and unsafe_fixture_detected,
+        "passed": (not direct_output_render)
+        and guard_called
+        and unsafe_fixture_detected
+        and app_scan["finding_count"] == 0
+        and unsafe_scan["finding_count"] > 0,
         "app_direct_condition_output_render": direct_output_render,
         "app_guard_called_before_claim_output": guard_called,
         "unsafe_fixture_detected": unsafe_fixture_detected,
+        "app_static_scan_findings": app_scan["finding_count"],
+        "unsafe_fixture_static_scan_findings": unsafe_scan["finding_count"],
     }
+
+
+def evaluate_log_minimization():
+    policy = pa.load_json(ROOT / "presence-policy" / "presence.guard.policy.json")
+    request = pa.load_json(ROOT / "presence-tests" / "fixtures" / "request_productivity_manager.json")
+    decision = pa.guard_decision(policy, request)
+    event = pa.minimal_audit_event(decision, request)
+    serialized = json.dumps(event, ensure_ascii=False)
+    forbidden_values = [
+        request["proposedText"],
+        "heart_rate",
+        "keyboard_activity",
+    ]
+    no_sensitive_values = all(value not in serialized for value in forbidden_values)
+    flags_ok = (
+        event["stores_claim_text"] is False
+        and event["stores_source_signals"] is False
+        and event["stores_user_identifier"] is False
+    )
+    return {"passed": no_sensitive_values and flags_ok, "event": event}
 
 
 def evaluate_fuzz():
@@ -279,6 +307,7 @@ def main(argv=None):
         "guard_fixture_decisions": evaluate_guard_fixtures(),
         "signature_and_invalid_input": evaluate_signature_and_invalid_inputs(),
         "bypass_checks": evaluate_bypass_checks(),
+        "log_minimization": evaluate_log_minimization(),
         "fuzz_negative_tests": evaluate_fuzz(),
         "no_network_core": evaluate_no_network_core(),
         "dependency_surface": evaluate_dependency_surface(),

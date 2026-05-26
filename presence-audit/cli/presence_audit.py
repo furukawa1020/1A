@@ -72,6 +72,78 @@ MITIGATIONS = {
     "P12": ["ban medical/psychological labels unless clinically validated and ethically governed"],
 }
 
+SCAN_RISK_ORDER = {"LOW": 0, "MEDIUM": 1, "HIGH": 2, "CRITICAL": 3}
+SCAN_EXTENSIONS = {
+    ".js",
+    ".jsx",
+    ".ts",
+    ".tsx",
+    ".dart",
+    ".c",
+    ".cc",
+    ".cpp",
+    ".h",
+    ".hpp",
+    ".html",
+    ".vue",
+    ".svelte",
+}
+SCAN_IGNORED_DIRS = {
+    ".git",
+    ".github",
+    "__pycache__",
+    "node_modules",
+    "target",
+    "analysis",
+    "paper",
+    "docs",
+    "presence-audit",
+    "presence-security",
+}
+CLAIM_SCAN_RULES = [
+    {
+        "rule_id": "CLAIM-C4-PSYCHOLOGICAL",
+        "severity": "C4",
+        "risk": "HIGH",
+        "claim_type": "psychological",
+        "terms": ["high stress", "stress detected", "anxiety", "burnout", "高ストレス", "ストレス状態", "不安傾向"],
+        "mitigation": "route psychological claims through requestClaim() and cap default output at C2",
+    },
+    {
+        "rule_id": "CLAIM-C3-BEHAVIORAL",
+        "severity": "C3",
+        "risk": "MEDIUM",
+        "claim_type": "behavioral",
+        "terms": ["focus decreased", "concentration has decreased", "集中力低下", "集中が低下", "注意低下"],
+        "mitigation": "rewrite behavioral assertions as non-assertive C2 cues",
+    },
+    {
+        "rule_id": "CLAIM-C5-PRODUCTIVITY",
+        "severity": "C5",
+        "risk": "CRITICAL",
+        "claim_type": "productivity",
+        "terms": [
+            "reduced work efficiency",
+            "reduced productivity",
+            "low productivity",
+            "productivity decreased",
+            "作業効率低下",
+            "作業効率が低下",
+            "生産性が低い",
+            "生産性低下",
+        ],
+        "mitigation": "prohibit productivity labels from health or self-observation signals",
+    },
+    {
+        "rule_id": "CLAIM-C6-ADMINISTRATIVE",
+        "severity": "C6",
+        "risk": "CRITICAL",
+        "claim_type": "administrative",
+        "terms": ["needs attention", "requires manager action", "manager report", "要注意", "要対応", "管理者対応", "管理者に共有"],
+        "mitigation": "remove administrative flags and authority-visible routing",
+    },
+]
+
 
 def parse_scalar(value):
     value = value.strip()
@@ -677,6 +749,8 @@ def guard_command(args):
         raise SystemExit("Policy signature verification failed")
     request = load_json(args.request)
     result = guard_decision(policy, request)
+    if args.log_output:
+        write_json(args.log_output, minimal_audit_event(result, request))
     output = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
     if args.output:
         Path(args.output).write_text(output, encoding="utf-8")
@@ -699,6 +773,154 @@ def verify_policy_command(args):
     ok = verify_bundle(policy, args.sign_secret)
     print("Policy signature OK" if ok else "Policy signature FAILED")
     return 0 if ok else 2
+
+
+def should_scan_path(path):
+    parts = set(path.parts)
+    if parts & SCAN_IGNORED_DIRS:
+        return False
+    return path.suffix.lower() in SCAN_EXTENSIONS
+
+
+def iter_scan_files(paths):
+    for raw_path in paths:
+        path = Path(raw_path)
+        if not path.exists():
+            continue
+        if path.is_file():
+            if should_scan_path(path):
+                yield path
+            continue
+        for candidate in path.rglob("*"):
+            if candidate.is_file() and should_scan_path(candidate):
+                yield candidate
+
+
+def scan_file(path):
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    findings = []
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        normalized_line = line.lower()
+        guard_context = "requestclaim" in normalized_line or "presenceguard" in normalized_line
+        for rule in CLAIM_SCAN_RULES:
+            for term in rule["terms"]:
+                index = normalized_line.find(term.lower())
+                if index < 0:
+                    continue
+                findings.append(
+                    {
+                        "path": str(path),
+                        "line": line_number,
+                        "column": index + 1,
+                        "term": term,
+                        "rule_id": rule["rule_id"],
+                        "severity": rule["severity"],
+                        "risk": rule["risk"],
+                        "claim_type": rule["claim_type"],
+                        "context": "guarded" if guard_context else "unguarded_literal",
+                        "mitigation": rule["mitigation"],
+                    }
+                )
+    return findings
+
+
+def scan_paths(paths):
+    findings = []
+    for path in iter_scan_files(paths):
+        findings.extend(scan_file(path))
+    max_risk = "LOW"
+    for finding in findings:
+        if SCAN_RISK_ORDER[finding["risk"]] > SCAN_RISK_ORDER[max_risk]:
+            max_risk = finding["risk"]
+    return {
+        "scanner": "presence-static-claim-scanner",
+        "risk_level": max_risk if findings else "LOW",
+        "finding_count": len(findings),
+        "findings": findings,
+        "policy": {
+            "purpose": "detect direct claim rendering and build-time bypass risk",
+            "log_minimization": "findings store source location, rule id, severity, and mitigation; they do not store user state or runtime observations",
+        },
+    }
+
+
+def render_scan_text(result):
+    lines = [
+        "PRESENCE Static Claim Scan",
+        f"Risk level: {result['risk_level']}",
+        f"Findings: {result['finding_count']}",
+        "",
+    ]
+    if not result["findings"]:
+        lines.append("No dangerous claim literals found.")
+        return "\n".join(lines) + "\n"
+    for finding in result["findings"]:
+        lines.append(
+            f"- {finding['path']}:{finding['line']}:{finding['column']} "
+            f"{finding['rule_id']} {finding['severity']} {finding['risk']} "
+            f"term={finding['term']!r} context={finding['context']}"
+        )
+        lines.append(f"  mitigation: {finding['mitigation']}")
+    return "\n".join(lines) + "\n"
+
+
+def render_scan_markdown(result):
+    lines = [
+        "# PRESENCE Static Claim Scan",
+        "",
+        f"- Risk level: **{result['risk_level']}**",
+        f"- Findings: **{result['finding_count']}**",
+        "",
+        "## Findings",
+    ]
+    if not result["findings"]:
+        lines.append("- None")
+        return "\n".join(lines) + "\n"
+    for finding in result["findings"]:
+        lines.append(
+            f"- `{finding['path']}:{finding['line']}:{finding['column']}` "
+            f"`{finding['rule_id']}` `{finding['severity']}` `{finding['risk']}` "
+            f"term `{finding['term']}`; context `{finding['context']}`"
+        )
+        lines.append(f"  - Mitigation: {finding['mitigation']}")
+    return "\n".join(lines) + "\n"
+
+
+def scan_command(args):
+    result = scan_paths(args.paths)
+    if args.format == "json":
+        output = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
+    elif args.format == "markdown":
+        output = render_scan_markdown(result)
+    else:
+        output = render_scan_text(result)
+    if args.output:
+        Path(args.output).write_text(output, encoding="utf-8")
+    else:
+        sys.stdout.write(output)
+    if args.fail_on and SCAN_RISK_ORDER[result["risk_level"]] >= SCAN_RISK_ORDER[args.fail_on]:
+        return 2
+    return 0
+
+
+def minimal_audit_event(result, request):
+    return {
+        "event_type": "presence_guard_decision",
+        "decision": result.get("decision"),
+        "allowed": result.get("allowed"),
+        "reason_count": len(result.get("reason", [])),
+        "reason_rules": result.get("reason", []),
+        "proposed_severity": request.get("proposedSeverity", "UNKNOWN"),
+        "claim_type": request.get("claimType") or request.get("type") or "unknown",
+        "audience": request.get("audience", "unknown"),
+        "retention": request.get("retention", "unknown"),
+        "stores_claim_text": False,
+        "stores_source_signals": False,
+        "stores_user_identifier": False,
+    }
 
 
 def mutation_test_command(args):
@@ -749,6 +971,7 @@ def main(argv=None):
     guard.add_argument("request")
     guard.add_argument("--verify-secret")
     guard.add_argument("--output")
+    guard.add_argument("--log-output", help="Write a minimized audit event without claim text or source signals.")
     guard.set_defaults(func=guard_command)
 
     compile_policy = subparsers.add_parser("compile-policy", help="Compile/sign a PRESENCE Guard policy bundle.")
@@ -766,6 +989,13 @@ def main(argv=None):
     mutation_test.add_argument("config")
     mutation_test.add_argument("--output")
     mutation_test.set_defaults(func=mutation_test_command)
+
+    scan = subparsers.add_parser("scan", help="Scan source files for direct dangerous claim literals.")
+    scan.add_argument("paths", nargs="+")
+    scan.add_argument("--format", choices=["text", "json", "markdown"], default="text")
+    scan.add_argument("--output")
+    scan.add_argument("--fail-on", choices=["LOW", "MEDIUM", "HIGH", "CRITICAL"])
+    scan.set_defaults(func=scan_command)
 
     args = parser.parse_args(argv)
     return args.func(args)
