@@ -9,6 +9,21 @@
     "visibility",
     "output",
     "condition_order",
+    "ess",
+    "audit_data_asset",
+    "audit_data_asset_ja",
+    "audit_trust_boundaries",
+    "audit_observers",
+    "audit_secondary_use_channels",
+    "audit_policy_profile",
+    "audit_data_transmission",
+    "audit_processing_location",
+    "audit_storage",
+    "audit_third_party_visibility",
+    "audit_identifiability",
+    "audit_secondary_use",
+    "audit_output_claim",
+    "audit_findings",
     "mfs_1",
     "mfs_2",
     "mfs_3",
@@ -101,4 +116,3 @@
     downloadJson
   };
 })(window);
-

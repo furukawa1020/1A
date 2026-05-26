@@ -363,6 +363,21 @@ button:disabled {
   vertical-align: top;
 }
 
+.audit-table td:nth-child(2),
+.audit-table th:nth-child(2) {
+  text-align: right;
+}
+
+.session-panel a {
+  color: var(--accent-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.session-panel a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 820px) {
   .topbar {
     align-items: flex-start;

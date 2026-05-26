@@ -27,6 +27,7 @@
           <h2>参加前確認</h2>
           <p>この研究は、医学的診断、メンタルヘルス評価、勤務評価、学業評価を目的としません。</p>
           <p>実験では、休んでいないが万全ではない状態で使われる自己観察支援システムを想像します。実際の不調を誘導したり、回答を管理者・教員・雇用者へ共有したりすることはありません。</p>
+          <p>シナリオ上のシステムのデータフローと、この実験基盤の回答保存フローは別物です。この実験基盤は回答をブラウザ内に保存し、サーバー送信しません。</p>
           <p>自由記述には、個人を特定できる情報や、具体的な病名・診断名を書かないでください。</p>
         </div>
 
@@ -95,6 +96,7 @@
         <div class="section-band">
           <h2>完了</h2>
           <p>8条件すべての回答がこのブラウザに保存されています。CSVまたはJSONとしてエクスポートできます。</p>
+          <p>デブリーフィング：管理者・教員・雇用者に見られる条件は、監視感やラベル押し付け感を評価するための仮想シナリオ操作です。実験回答は実際には第三者へ共有されません。</p>
         </div>
         <div id="completionSummary" class="summary-grid"></div>
         <div class="actions">
@@ -109,6 +111,7 @@
     <script src="src/scenario/scenario.js"></script>
     <script src="src/questionnaire/items.js"></script>
     <script src="src/manipulation_check/items.js"></script>
+    <script src="src/audit/audit.js"></script>
     <script src="src/condition_renderer/renderer.js"></script>
     <script src="src/logger/storage.js"></script>
     <script src="src/export/exporter.js"></script>

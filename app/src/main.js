@@ -63,6 +63,7 @@
     return {
       participant_id: participantId,
       study_version: conditionFile.study_version,
+      audit_schema: conditionFile.audit_schema,
       order_strategy: "balanced_latin_square_by_participant_id",
       condition_sequence: balancedLatinSequence(conditionIds, participantId),
       responses: [],
@@ -130,6 +131,7 @@
       visibility: condition.visibility,
       output: condition.output,
       condition_order: session.responses.length + 1,
+      ...PSTT.Audit.flattenAudit(condition, conditionFile.audit_schema),
       ...values,
       answered_at: new Date().toISOString()
     };
@@ -313,4 +315,3 @@
 
   main();
 })(window);
-
