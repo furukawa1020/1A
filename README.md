@@ -12,8 +12,10 @@ The central security and privacy question is not "How accurately can we infer a 
 
 - `docs/`: positioning, threat model, factorial design, measures, ESS audit, ethics, and analysis plan.
 - `app/`: browser-based PSTT experiment interface and 2x2x2 condition file.
+- `app/audit.html`: researcher-only audit view that computes ESS and policy findings without participant ratings.
 - `analysis/`: preregistration draft and analysis scripts.
 - `analysis/scripts/08_compute_ess.py`: researcher-side ESS audit from the condition JSON.
+- `analysis/scripts/09_policy_audit.py`: policy finding audit from the condition JSON.
 - `paper/`: paper title, abstract, introduction, method, and discussion templates.
 
 ### Run The Testbed
@@ -31,6 +33,12 @@ http://127.0.0.1:8000/
 ```
 
 Responses are stored in the browser's local storage and can be exported as CSV or JSON. No server upload is performed by the app.
+
+For researcher-side condition auditing without participants, open:
+
+```text
+http://127.0.0.1:8000/audit.html
+```
 
 ### Study Design
 
@@ -66,8 +74,10 @@ This project must not claim that it can:
 
 - `docs/`: 位置づけ、脅威モデル、因子設計、尺度、ESS監査、倫理、分析計画。
 - `app/`: ブラウザで動作するPSTT実験UIと2x2x2条件定義ファイル。
+- `app/audit.html`: 参加者評価なしでESSとポリシー所見を計算する研究者用監査ビュー。
 - `analysis/`: 事前登録草案と分析スクリプト。
 - `analysis/scripts/08_compute_ess.py`: 条件JSONから研究者側ESS監査を行うスクリプト。
+- `analysis/scripts/09_policy_audit.py`: 条件JSONからポリシー所見を出す監査スクリプト。
 - `paper/`: 論文タイトル、要旨、導入、方法、結果、議論の雛形。
 
 ### 実験基盤の起動
@@ -85,6 +95,12 @@ http://127.0.0.1:8000/
 ```
 
 回答はブラウザのローカルストレージに保存され、CSVまたはJSONとしてエクスポートできる。アプリは回答をサーバーへアップロードしない。
+
+参加者を使わずに条件監査だけを行う場合は、次を開く。
+
+```text
+http://127.0.0.1:8000/audit.html
+```
 
 ### 研究デザイン
 

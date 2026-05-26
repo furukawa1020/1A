@@ -16,6 +16,23 @@ REQUIRED_KEYS = {
     "processing_text",
     "visibility_text",
     "output_text",
+    "audit",
+}
+
+AUDIT_KEYS = {
+    "data_asset",
+    "data_asset_ja",
+    "data_transmission",
+    "processing_location",
+    "storage",
+    "third_party_visibility",
+    "identifiability",
+    "secondary_use",
+    "output_claim",
+    "trust_boundaries",
+    "observers",
+    "secondary_use_channels",
+    "policy_profile",
 }
 
 EXPECTED_COMBINATIONS = {
@@ -43,6 +60,9 @@ def main():
     if len(conditions) != 8:
         raise SystemExit(f"Expected 8 conditions, found {len(conditions)}")
 
+    if "audit_schema" not in data or "weights" not in data["audit_schema"]:
+        raise SystemExit("Missing audit_schema.weights")
+
     ids = [condition.get("condition_id") for condition in conditions]
     expected_ids = [f"C{index}" for index in range(1, 9)]
     if sorted(ids, key=lambda value: int(value[1:])) != expected_ids:
@@ -54,6 +74,21 @@ def main():
         missing = REQUIRED_KEYS - set(condition)
         if missing:
             raise SystemExit(f"{condition.get('condition_id')} missing keys: {sorted(missing)}")
+        audit_missing = AUDIT_KEYS - set(condition["audit"])
+        if audit_missing:
+            raise SystemExit(f"{condition.get('condition_id')} missing audit keys: {sorted(audit_missing)}")
+        for key in [
+            "data_transmission",
+            "processing_location",
+            "storage",
+            "third_party_visibility",
+            "identifiability",
+            "secondary_use",
+            "output_claim",
+        ]:
+            value = condition["audit"][key]
+            if value not in [0, 1, 2]:
+                raise SystemExit(f"{condition.get('condition_id')} audit {key} must be 0, 1, or 2")
         combos.add((condition["processing"], condition["visibility"], condition["output"]))
         line_counts.add(len(condition["output_text"].splitlines()))
 
@@ -63,7 +98,7 @@ def main():
     if len(line_counts) != 1:
         raise SystemExit(f"Output line counts differ across conditions: {sorted(line_counts)}")
 
-    print("OK: condition file has 8 controlled 2x2x2 conditions.")
+    print("OK: condition file has 8 controlled 2x2x2 conditions with audit manifests.")
 
 
 if __name__ == "__main__":

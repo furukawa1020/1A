@@ -61,6 +61,17 @@ SOUS(C8) >= SOUS(C1) - 0.5
 
 The provisional margin is 0.5 on a 7-point scale.
 
+### Audit Outputs
+
+Before participant analysis, compute:
+
+```text
+python analysis/scripts/08_compute_ess.py
+python analysis/scripts/09_policy_audit.py
+```
+
+These outputs are not participant outcomes. They document the design exposure and policy-relevant findings for each condition.
+
 ## 日本語
 
 ### 主分析モデル
@@ -122,3 +133,13 @@ SOUS(C8) >= SOUS(C1) - 0.5
 
 暫定マージンは7件法で0.5とする。
 
+### 監査出力
+
+参加者分析の前に次を計算する。
+
+```text
+python analysis/scripts/08_compute_ess.py
+python analysis/scripts/09_policy_audit.py
+```
+
+これらの出力は参加者アウトカムではない。各条件の設計曝露とポリシー上重要な所見を記録するものである。
