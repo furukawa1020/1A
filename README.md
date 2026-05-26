@@ -13,6 +13,7 @@ The central security and privacy question is not "How accurately can we infer a 
 - `docs/`: positioning, threat model, factorial design, measures, ESS audit, ethics, and analysis plan.
 - `app/`: browser-based PSTT experiment interface and 2x2x2 condition file.
 - `analysis/`: preregistration draft and analysis scripts.
+- `analysis/scripts/08_compute_ess.py`: researcher-side ESS audit from the condition JSON.
 - `paper/`: paper title, abstract, introduction, method, and discussion templates.
 
 ### Run The Testbed
@@ -66,6 +67,7 @@ This project must not claim that it can:
 - `docs/`: 位置づけ、脅威モデル、因子設計、尺度、ESS監査、倫理、分析計画。
 - `app/`: ブラウザで動作するPSTT実験UIと2x2x2条件定義ファイル。
 - `analysis/`: 事前登録草案と分析スクリプト。
+- `analysis/scripts/08_compute_ess.py`: 条件JSONから研究者側ESS監査を行うスクリプト。
 - `paper/`: 論文タイトル、要旨、導入、方法、結果、議論の雛形。
 
 ### 実験基盤の起動
@@ -105,4 +107,3 @@ http://127.0.0.1:8000/
 - 生産性を評価できる。
 - 健康上のアウトカムを改善できる。
 - クラウド処理や管理者可視性が常に有害である。
-
