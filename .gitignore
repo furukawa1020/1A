@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 analysis/outputs/
 presence-core/target/
+node_modules/
+presence-sdk-ts/node_modules/
