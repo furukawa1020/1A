@@ -11,6 +11,7 @@ The central security and privacy question is not "How accurately can we infer a 
 ### Repository Layout
 
 - `presence-core/`: runtime decision model for claim-capability enforcement.
+- `presence-sdk-ts/`: TypeScript SDK shape for Web/Node integration.
 - `presence-policy/`: default deny-by-default PRESENCE Guard policy.
 - `presence-sdk-js/`: Web/JavaScript runtime guard SDK.
 - `presence-sdk-dart/`: Dart/Flutter API sketch.
@@ -58,7 +59,26 @@ python presence-audit\cli\presence_audit.py audit presence-audit\examples\cloud_
 ```powershell
 python presence-audit\cli\presence_audit.py guard presence-policy\presence.guard.policy.json presence-tests\fixtures\request_high_stress_self.json
 node presence-sdk-js\test\guard_smoke_test.js
+cargo test --manifest-path presence-core\Cargo.toml
 ```
+
+Run the Paper 1A non-human evaluation:
+
+```powershell
+python presence-tests\run_presence_evaluation.py --output analysis\outputs\presence_evaluation.json
+python presence-tests\benchmark_guard.py --output analysis\outputs\presence_overhead.json
+```
+
+The evaluation covers P1-P12 misuse-case fixtures, policy mutation tests, runtime allow/rewrite/deny decisions, signed policy tamper rejection, invalid input rejection, bypass checks, fuzz negative tests, no-network core scanning, dependency-surface checks, and overhead measurements.
+
+Paper 1Aの人なし評価を実行するには次を使う。
+
+```powershell
+python presence-tests\run_presence_evaluation.py --output analysis\outputs\presence_evaluation.json
+python presence-tests\benchmark_guard.py --output analysis\outputs\presence_overhead.json
+```
+
+この評価は、P1からP12までのmisuse-case fixture、policy mutation test、runtimeのallow/rewrite/deny判定、署名付きpolicyの改ざん拒否、invalid input rejection、bypass check、fuzz negative test、no-network core scan、dependency-surface check、overhead measurementを対象にする。
 
 Generate a Markdown report:
 

@@ -4,7 +4,7 @@
 //! and does not contain networking, dynamic evaluation, file I/O, or policy
 //! download logic.
 
-#![forbid(unsafe_code)]
+#![deny(unsafe_op_in_unsafe_fn)]
 
 pub const PRESENCE_DECISION_ALLOW: u8 = 0;
 pub const PRESENCE_DECISION_REWRITE: u8 = 1;

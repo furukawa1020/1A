@@ -249,6 +249,12 @@ def evaluate_overhead(iterations):
     elapsed = time.perf_counter() - start
     policy_bytes = len(json.dumps(policy, ensure_ascii=False).encode("utf-8"))
     request_bytes = len(json.dumps(request, ensure_ascii=False).encode("utf-8"))
+    release_dir = ROOT / "presence-core" / "target" / "release"
+    rust_artifacts = {}
+    for artifact in ["presence_core.dll", "libpresence_core.a", "libpresence_core.rlib"]:
+        path = release_dir / artifact
+        if path.exists():
+            rust_artifacts[artifact] = path.stat().st_size
     return {
         "passed": True,
         "iterations": iterations,
@@ -256,7 +262,8 @@ def evaluate_overhead(iterations):
         "mean_decision_latency_ms": (elapsed / iterations) * 1000,
         "policy_size_bytes": policy_bytes,
         "request_size_bytes": request_bytes,
-        "measurement": "Python CLI engine overhead on this local machine; Rust core should be measured separately when release-built.",
+        "rust_release_artifact_sizes_bytes": rust_artifacts,
+        "measurement": "Python CLI engine overhead on this local machine; Rust release artifact sizes are included when built.",
     }
 
 
