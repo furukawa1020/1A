@@ -1,0 +1,239 @@
+{
+  "passed": false,
+  "rows": [
+    {
+      "profile": "employee_app_manager_dashboard",
+      "risk_level": "CRITICAL",
+      "presence_score": 32,
+      "detected_patterns": [
+        "P1",
+        "P10",
+        "P12",
+        "P2",
+        "P3",
+        "P5",
+        "P7",
+        "P9"
+      ],
+      "missing_patterns": [
+        "P8"
+      ],
+      "high_risk_claim_types": [
+        "administrative",
+        "psychological"
+      ],
+      "missing_claim_types": [],
+      "risk_ok": true,
+      "pattern_ok": false,
+      "claim_ok": true,
+      "passed": false,
+      "mitigations": [
+        "remove manager/evaluator visibility",
+        "separate self-support outputs from assessment systems",
+        "cap feedback frequency",
+        "avoid comparative scores",
+        "make reflection user-controlled",
+        "cap claims at C2 pattern-level cues",
+        "show uncertainty and context limits",
+        "disable long-term retention",
+        "delete raw data by default",
+        "separate care suggestions from compliance workflows",
+        "preserve user interpretation space",
+        "avoid single-state labels",
+        "avoid actionable flags unless evidence and consent are strong",
+        "ban medical/psychological labels unless clinically validated and ethically governed",
+        "make output self-only"
+      ]
+    },
+    {
+      "profile": "health_data_labor_risk_dashboard",
+      "risk_level": "CRITICAL",
+      "presence_score": 34,
+      "detected_patterns": [
+        "P1",
+        "P10",
+        "P2",
+        "P3",
+        "P5",
+        "P7",
+        "P8",
+        "P9"
+      ],
+      "missing_patterns": [],
+      "high_risk_claim_types": [
+        "administrative"
+      ],
+      "missing_claim_types": [],
+      "risk_ok": true,
+      "pattern_ok": true,
+      "claim_ok": true,
+      "passed": true,
+      "mitigations": [
+        "remove manager/evaluator visibility",
+        "separate self-support outputs from assessment systems",
+        "cap feedback frequency",
+        "avoid comparative scores",
+        "make reflection user-controlled",
+        "cap claims at C2 pattern-level cues",
+        "show uncertainty and context limits",
+        "disable long-term retention",
+        "delete raw data by default",
+        "separate care suggestions from compliance workflows",
+        "make use voluntary with full opt-out",
+        "preserve user interpretation space",
+        "avoid single-state labels",
+        "avoid actionable flags unless evidence and consent are strong",
+        "make output self-only"
+      ]
+    },
+    {
+      "profile": "noticer_local_low_risk",
+      "risk_level": "LOW",
+      "presence_score": 3,
+      "detected_patterns": [],
+      "missing_patterns": [],
+      "high_risk_claim_types": [],
+      "missing_claim_types": [],
+      "risk_ok": true,
+      "pattern_ok": true,
+      "claim_ok": true,
+      "passed": true,
+      "mitigations": []
+    },
+    {
+      "profile": "presenteeism_survey_dashboard",
+      "risk_level": "CRITICAL",
+      "presence_score": 31,
+      "detected_patterns": [
+        "P1",
+        "P10",
+        "P12",
+        "P2",
+        "P3",
+        "P5",
+        "P6",
+        "P7",
+        "P8",
+        "P9"
+      ],
+      "missing_patterns": [
+        "P11"
+      ],
+      "high_risk_claim_types": [
+        "productivity",
+        "psychological"
+      ],
+      "missing_claim_types": [],
+      "risk_ok": true,
+      "pattern_ok": false,
+      "claim_ok": true,
+      "passed": false,
+      "mitigations": [
+        "remove manager/evaluator visibility",
+        "separate self-support outputs from assessment systems",
+        "cap feedback frequency",
+        "avoid comparative scores",
+        "make reflection user-controlled",
+        "cap claims at C2 pattern-level cues",
+        "show uncertainty and context limits",
+        "disable long-term retention",
+        "delete raw data by default",
+        "prohibit productivity labels from health or unwellness signals",
+        "separate care suggestions from compliance workflows",
+        "make use voluntary with full opt-out",
+        "preserve user interpretation space",
+        "avoid single-state labels",
+        "avoid actionable flags unless evidence and consent are strong",
+        "ban medical/psychological labels unless clinically validated and ethically governed",
+        "make output self-only"
+      ]
+    },
+    {
+      "profile": "productivity_loss_visualization",
+      "risk_level": "CRITICAL",
+      "presence_score": 31,
+      "detected_patterns": [
+        "P1",
+        "P10",
+        "P11",
+        "P2",
+        "P3",
+        "P5",
+        "P6",
+        "P7",
+        "P8",
+        "P9"
+      ],
+      "missing_patterns": [],
+      "high_risk_claim_types": [
+        "productivity"
+      ],
+      "missing_claim_types": [],
+      "risk_ok": true,
+      "pattern_ok": true,
+      "claim_ok": true,
+      "passed": true,
+      "mitigations": [
+        "remove manager/evaluator visibility",
+        "separate self-support outputs from assessment systems",
+        "cap feedback frequency",
+        "avoid comparative scores",
+        "make reflection user-controlled",
+        "cap claims at C2 pattern-level cues",
+        "show uncertainty and context limits",
+        "disable long-term retention",
+        "delete raw data by default",
+        "prohibit productivity labels from health or unwellness signals",
+        "separate care suggestions from compliance workflows",
+        "make use voluntary with full opt-out",
+        "preserve user interpretation space",
+        "avoid single-state labels",
+        "avoid actionable flags unless evidence and consent are strong",
+        "remove group benchmarking for self-support data",
+        "make output self-only"
+      ]
+    },
+    {
+      "profile": "stress_check_high_risk_extraction",
+      "risk_level": "CRITICAL",
+      "presence_score": 34,
+      "detected_patterns": [
+        "P1",
+        "P10",
+        "P2",
+        "P3",
+        "P5",
+        "P7",
+        "P8",
+        "P9"
+      ],
+      "missing_patterns": [],
+      "high_risk_claim_types": [
+        "administrative",
+        "psychological"
+      ],
+      "missing_claim_types": [],
+      "risk_ok": true,
+      "pattern_ok": true,
+      "claim_ok": true,
+      "passed": true,
+      "mitigations": [
+        "remove manager/evaluator visibility",
+        "separate self-support outputs from assessment systems",
+        "cap feedback frequency",
+        "avoid comparative scores",
+        "make reflection user-controlled",
+        "cap claims at C2 pattern-level cues",
+        "show uncertainty and context limits",
+        "disable long-term retention",
+        "delete raw data by default",
+        "separate care suggestions from compliance workflows",
+        "make use voluntary with full opt-out",
+        "preserve user interpretation space",
+        "avoid single-state labels",
+        "avoid actionable flags unless evidence and consent are strong",
+        "make output self-only"
+      ]
+    }
+  ]
+}
