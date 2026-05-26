@@ -7,6 +7,9 @@ on:
       - "presence-audit/examples/*.yaml"
       - "presence-audit/cli/**"
       - "presence-audit/schema/**"
+      - "app/src/**"
+      - "presence-sdk-js/src/**"
+      - "presence-sdk-ts/src/**"
 
 jobs:
   audit:
@@ -15,5 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Audit low-risk reference
         run: python presence-audit/cli/presence_audit.py audit presence-audit/examples/noticer_local.yaml --fail-on HIGH
+      - name: Static claim scan
+        run: python presence-audit/cli/presence_audit.py scan app/src presence-sdk-js/src presence-sdk-ts/src --fail-on HIGH
       - name: Generate high-risk example report
         run: python presence-audit/cli/presence_audit.py audit presence-audit/examples/cloud_wellbeing_dashboard.yaml --format markdown --output presence-audit/reports/cloud_wellbeing_dashboard.md

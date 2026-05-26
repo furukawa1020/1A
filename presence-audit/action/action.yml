@@ -9,11 +9,23 @@ inputs:
     description: "Risk level that should fail the action: LOW, MEDIUM, HIGH, or CRITICAL."
     required: false
     default: "HIGH"
+  scan-paths:
+    description: "Optional source paths to scan for direct dangerous claim literals."
+    required: false
+    default: ""
+  scan-fail-on:
+    description: "Static claim scan risk level that should fail the action."
+    required: false
+    default: "HIGH"
 runs:
   using: "composite"
   steps:
     - name: Run PRESENCE audit
       shell: bash
-      run: |
+      run: >
         python "$GITHUB_ACTION_PATH/../cli/presence_audit.py" audit "${{ inputs.config }}" --fail-on "${{ inputs.fail-on }}"
-
+    - name: Run PRESENCE static claim scan
+      if: ${{ inputs.scan-paths != '' }}
+      shell: bash
+      run: >
+        python "$GITHUB_ACTION_PATH/../cli/presence_audit.py" scan ${{ inputs.scan-paths }} --fail-on "${{ inputs.scan-fail-on }}"
