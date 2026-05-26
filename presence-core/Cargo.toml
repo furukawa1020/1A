@@ -1,0 +1,14 @@
+[package]
+name = "presence-core"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "No-network PRESENCE Guard claim-flow reference monitor core"
+
+[lib]
+crate-type = ["rlib", "cdylib", "staticlib"]
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
